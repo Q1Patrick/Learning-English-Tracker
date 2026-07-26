@@ -42,8 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #Third-party apps
-    
+    "rest_framework",
+
+    #Local apps 
+    "apps.accounts.apps.AccountsConfig",
+    "apps.learning.apps.LearningConfig",
 ]
+
+AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
