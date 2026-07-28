@@ -7,7 +7,8 @@ from rest_framework.response import Response
 def health_check(request):
     return Response(
         {
-            "status": True,
+            "success": True,
+            "status": "healthy",
             "message": "English Learning Tracker API is running.",
         }
     )
