@@ -1,16 +1,11 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+## 
+import uuid
+from .managers import UserManager
 
 
-class User(AbstractUser):
-    email = models.EmailField(unique=True)
-
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
-
-    def __str__(self) -> str:
-        return self.email
 
 
 class UserProfile(models.Model):
@@ -40,3 +35,55 @@ class UserProfile(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.email} profile"
+    
+#### Create the custom user model ####
+class User(AbstractUser):
+    """Application user who authenticates using an email address."""
+
+    username = None
+
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
+    email = models.EmailField(
+        unique=True,
+        db_index=True,
+    )
+
+    first_name = models.CharField(
+        max_length=150,
+        blank=True,
+    )
+
+    last_name = models.CharField(
+        max_length=150,
+        blank=True,
+    )
+
+    is_email_verified = models.BooleanField(
+        default=False,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS: list[str] = []
+
+    objects = UserManager()
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "user"
+        verbose_name_plural = "users"
+
+    def __str__(self) -> str:
+        return self.email
