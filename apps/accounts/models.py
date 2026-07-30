@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -40,3 +41,73 @@ class UserProfile(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.email} profile"
+    
+# UserProfile mode
+class UserProfile(models.Model):
+    """Stores English-learning preferences and personal profile data."""
+
+    class EnglishLevel(models.TextChoices):
+        BEGINNER = "A1", "A1 - Beginner"
+        ELEMENTARY = "A2", "A2 - Elementary"
+        INTERMEDIATE = "B1", "B1 - Intermediate"
+        UPPER_INTERMEDIATE = "B2", "B2 - Upper-intermediate"
+        ADVANCED = "C1", "C1 - Advanced"
+        PROFICIENT = "C2", "C2 - Proficient"
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="profile",
+    )
+
+    display_name = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+
+    english_level = models.CharField(
+        max_length=2,
+        choices=EnglishLevel.choices,
+        default=EnglishLevel.BEGINNER,
+    )
+
+    daily_target_minutes = models.PositiveSmallIntegerField(
+        default=30,
+        validators=[
+            MinValueValidator(5),
+            MaxValueValidator(480),
+        ],
+    )
+
+    learning_goal = models.TextField(
+        blank=True,
+    )
+
+    timezone = models.CharField(
+        max_length=64,
+        default="UTC",
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
+
+    class Meta:
+        verbose_name = "user profile"
+        verbose_name_plural = "user profiles"
+        constraints = [
+            models.CheckConstraint(
+                check=(
+                    models.Q(daily_target_minutes__gte=5)
+                    & models.Q(daily_target_minutes__lte=480)
+                ),
+                name="profile_daily_target_between_5_and_480",
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return f"Profile of {self.user.email}"
