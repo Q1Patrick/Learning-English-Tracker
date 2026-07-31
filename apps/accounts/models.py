@@ -1,22 +1,51 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+import uuid
+from .managers import UserManager
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True)
+    username = None
+
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
+    email = models.EmailField(
+        unique=True,
+        db_index=True,
+    )
+
+    is_email_verified = models.BooleanField(
+        default=False,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS = []
 
-    def __str__(self) -> str:
+    objects = UserManager()
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
         return self.email
 
 
 class UserProfile(models.Model):
     class EnglishLevel(models.TextChoices):
         BEGINNER = "A1", "A1"
-        ELEMENTARY = "A2", "A2"
+        ELEMENTARY = "A2", "A2" 
         INTERMEDIATE = "B1", "B1"
         UPPER_INTERMEDIATE = "B2", "B2"
         ADVANCED = "C1", "C1"
