@@ -10,7 +10,9 @@ class RegisterView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
+        serializer = RegisterSerializer(
+            data=request.data,
+        )
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
@@ -19,9 +21,10 @@ class RegisterView(APIView):
                 "success": True,
                 "message": "Account created successfully.",
                 "data": {
-                    "id": user.id,
-                    "username": user.username,
+                    "id": str(user.id),
                     "email": user.email,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
                 },
             },
             status=status.HTTP_201_CREATED,
