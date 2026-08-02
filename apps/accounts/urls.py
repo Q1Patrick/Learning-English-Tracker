@@ -3,7 +3,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
-    TokenVerifyView,
+    TokenVerifyView
 )
 from .views import CurrentUserView, LoginView, RegisterView
 app_name = "accounts"
