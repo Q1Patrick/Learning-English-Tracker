@@ -2,7 +2,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.db import transaction
 from rest_framework import serializers
-
+from rest_framework_simplejwt.serializers import (
+    TokenObtainPairSerializer,
+)
 from .models import UserProfile
 
 
@@ -95,3 +97,17 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return user
     
+#Login JWT
+class LoginSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        data["user"] = {
+            "id": str(self.user.id),
+            "email": self.user.email,
+            "first_name": self.user.first_name,
+            "last_name": self.user.last_name,
+            "is_email_verified": self.user.is_email_verified,
+        }
+
+        return data
