@@ -99,8 +99,6 @@ class RegisterSerializer(serializers.ModelSerializer):
     
 #Login JWT
 class LoginSerializer(TokenObtainPairSerializer):
-    """Authenticate a user and return JWT tokens with basic user data."""
-
     def validate(self, attrs):
         data = super().validate(attrs)
 

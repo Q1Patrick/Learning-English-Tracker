@@ -38,6 +38,8 @@ class JWTAuthenticationTests(APITestCase):
         )
         self.assertIn("access", response.data)
         self.assertIn("refresh", response.data)
+        print("LOGIN RESPONSE:", response.data)
+
         self.assertEqual(
             response.data["user"]["email"],
             self.user.email,
