@@ -67,5 +67,10 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    timezone = models.CharField(
+        max_length=64,
+        default="Asia/Ho_Chi_Minh",
+    )
+
     def __str__(self) -> str:
         return f"{self.user.email} profile"
