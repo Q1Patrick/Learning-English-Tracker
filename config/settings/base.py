@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     #Local apps 
     "apps.accounts.apps.AccountsConfig",
     "apps.learning.apps.LearningConfig",
+    "apps.goals.apps.GoalsConfig",
+    "apps.statistic.apps.StatisticsConfig",
 ]
 
 AUTH_USER_MODEL = "accounts.User"

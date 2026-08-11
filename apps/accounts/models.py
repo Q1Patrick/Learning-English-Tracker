@@ -1,14 +1,16 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from .managers import UserManager
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True)
+    username = None
+    email = models.EmailField(unique=True,db_index=True)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS = []
 
+    objects = UserManager()
     def __str__(self) -> str:
         return self.email
 
@@ -35,6 +37,10 @@ class UserProfile(models.Model):
     )
     daily_target_minutes = models.PositiveIntegerField(default=30)
     learning_goal = models.TextField(blank=True)
+    timezone = models.CharField(
+        max_length=64,
+        default="Asia/Ho_Chi_Minh",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
