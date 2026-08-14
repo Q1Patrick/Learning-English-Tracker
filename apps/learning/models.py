@@ -7,8 +7,6 @@ from django.utils import timezone
 
 
 class StudySession(models.Model):
-    """Represents one English-learning study session."""
-
     class ActivityType(models.TextChoices):
         SPEAKING = "speaking", "Speaking"
         LISTENING = "listening", "Listening"
@@ -50,9 +48,7 @@ class StudySession(models.Model):
         ],
     )
 
-    notes = models.TextField(
-        blank=True,
-    )
+    notes = models.TextField(blank=True)
 
     studied_at = models.DateTimeField(
         default=timezone.now,
@@ -68,31 +64,6 @@ class StudySession(models.Model):
 
     class Meta:
         ordering = ["-studied_at"]
-
-        indexes = [
-            models.Index(
-                fields=["user", "studied_at"],
-                name="study_user_date_idx",
-            ),
-            models.Index(
-                fields=["user", "activity_type"],
-                name="study_user_type_idx",
-            ),
-        ]
-
-        constraints = [
-            models.CheckConstraint(
-                check=models.Q(duration_minutes__gte=1),
-                name="study_duration_positive",
-            ),
-            models.CheckConstraint(
-                check=(
-                    models.Q(score__isnull=True)
-                    | models.Q(score__gte=0, score__lte=100)
-                ),
-                name="study_score_between_0_and_100",
-            ),
-        ]
 
     def __str__(self):
         return (

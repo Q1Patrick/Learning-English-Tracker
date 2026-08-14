@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "apps.accounts.apps.AccountsConfig",
     "apps.learning.apps.LearningConfig",
     "apps.goals.apps.GoalsConfig",
+    "apps.statistic.apps.StatisticsConfig",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
@@ -143,7 +144,6 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
-    "AUTH_HEADER_TYPES": ("Bearer",),
 }

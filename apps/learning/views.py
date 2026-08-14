@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
 from rest_framework.permissions import IsAuthenticated
 
 from .models import StudySession
@@ -17,7 +19,7 @@ def health_check(request):
             "message": "English Learning Tracker API is running.",
         }
     )
-#Build the List/Create API
+
 class StudySessionListCreateView(ListCreateAPIView):
     serializer_class = StudySessionSerializer
     permission_classes = [IsAuthenticated]
@@ -29,5 +31,15 @@ class StudySessionListCreateView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(
+            user=self.request.user
+        )
+
+
+class StudySessionDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = StudySessionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return StudySession.objects.filter(
             user=self.request.user
         )

@@ -1,12 +1,31 @@
 from django.urls import path
 
 from .views import (
+    StudySessionDetailView,
     StudySessionListCreateView,
     health_check,
 )
 
+
 app_name = "learning"
-urlpatterns =[
-    path("health/", health_check, name="health-check"),
-        path("study-sessions/",StudySessionListCreateView.as_view(),name="study-session-list-create",),
+
+
+urlpatterns = [
+    path(
+        "health/",
+        health_check,
+        name="health-check",
+    ),
+
+    path(
+        "study-sessions/",
+        StudySessionListCreateView.as_view(),
+        name="study-session-list-create",
+    ),
+
+    path(
+        "study-sessions/<uuid:pk>/",
+        StudySessionDetailView.as_view(),
+        name="study-session-detail",
+    ),
 ]

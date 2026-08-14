@@ -6,7 +6,7 @@ from django.db import models
 
 
 class DailyGoal(models.Model):
-    """Represents a user's study target for one specific day."""
+    """A user's study target for a specific day."""
 
     id = models.UUIDField(
         primary_key=True,

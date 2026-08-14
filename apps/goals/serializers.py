@@ -20,16 +20,3 @@ class DailyGoalSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         )
-
-    def validate_target_minutes(self, value):
-        if value < 5:
-            raise serializers.ValidationError(
-                "Target must be at least 5 minutes."
-            )
-
-        if value > 480:
-            raise serializers.ValidationError(
-                "Target cannot exceed 480 minutes."
-            )
-
-        return value

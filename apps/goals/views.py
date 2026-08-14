@@ -1,8 +1,11 @@
 from django.db import IntegrityError
 from rest_framework import serializers
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
+
 from .models import DailyGoal
 from .serializers import DailyGoalSerializer
 
@@ -24,12 +27,10 @@ class DailyGoalListCreateView(ListCreateAPIView):
         except IntegrityError:
             raise serializers.ValidationError(
                 {
-                    "target_date": (
+                    "target_date":
                         "You already have a goal for this date."
-                    )
                 }
             )
-        
 
 
 class DailyGoalDetailView(RetrieveUpdateDestroyAPIView):
