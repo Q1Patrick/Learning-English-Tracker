@@ -9,7 +9,10 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-
+    
+    is_email_verified = models.BooleanField(
+        default=False,
+    )
     objects = UserManager()
     def __str__(self) -> str:
         return self.email
