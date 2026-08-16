@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "apps.learning.apps.LearningConfig",
     "apps.goals.apps.GoalsConfig",
     "apps.statistic.apps.StatisticsConfig",
+    "apps.vocabulary.apps.VocabularyConfig",
 ]
 
 AUTH_USER_MODEL = "accounts.User"

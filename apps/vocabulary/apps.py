@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class VocabularyConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'vocabulary'
+    name = 'apps.vocabulary'

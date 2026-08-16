@@ -23,5 +23,5 @@ urlpatterns = [
     path("api/v1/", include("apps.learning.urls")),
     path("api/v1/goals/",include("apps.goals.urls"),),
     path("api/v1/statistic/",include("apps.statistic.urls"),),
-
+    path("api/v1/vocabulary/",include("apps.vocabulary.urls"),),
 ]
