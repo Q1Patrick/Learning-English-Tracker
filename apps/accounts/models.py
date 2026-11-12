@@ -1,19 +1,22 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
 from .managers import UserManager
+
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(unique=True,db_index=True)
+    email = models.EmailField(unique=True, db_index=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-    
+
     is_email_verified = models.BooleanField(
         default=False,
     )
     objects = UserManager()
+
     def __str__(self) -> str:
         return self.email
 

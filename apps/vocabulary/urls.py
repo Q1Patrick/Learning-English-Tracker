@@ -5,7 +5,6 @@ from .views import (
     VocabularyListCreateView,
 )
 
-
 app_name = "vocabulary"
 
 
@@ -15,7 +14,6 @@ urlpatterns = [
         VocabularyListCreateView.as_view(),
         name="list-create",
     ),
-
     path(
         "<uuid:pk>/",
         VocabularyDetailView.as_view(),

@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.test import SimpleTestCase
 
 User = get_user_model()
 
@@ -38,7 +37,6 @@ class JWTAuthenticationTests(APITestCase):
         )
         self.assertIn("access", response.data)
         self.assertIn("refresh", response.data)
-        print("LOGIN RESPONSE:", response.data)
 
         self.assertEqual(
             response.data["user"]["email"],
@@ -72,9 +70,7 @@ class JWTAuthenticationTests(APITestCase):
 
         access_token = login_response.data["access"]
 
-        self.client.credentials(
-            HTTP_AUTHORIZATION=f"Bearer {access_token}"
-        )
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access_token}")
 
         response = self.client.get(self.current_user_url)
 
@@ -120,9 +116,3 @@ class JWTAuthenticationTests(APITestCase):
             status.HTTP_200_OK,
         )
         self.assertIn("access", response.data)
-
-
-
-class JWTTestDiscoveryTests(SimpleTestCase):
-    def test_jwt_test_file_is_discovered(self):
-        self.assertTrue(True)

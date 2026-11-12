@@ -64,10 +64,11 @@ class StudySession(models.Model):
 
     class Meta:
         ordering = ["-studied_at"]
+        indexes = [
+            models.Index(fields=["user", "-studied_at"], name="study_user_studied_idx"),
+        ]
 
     def __str__(self):
         return (
-            f"{self.user.email} - "
-            f"{self.get_activity_type_display()} "
-            f"({self.duration_minutes} min)"
+            f"{self.user.email} - {self.get_activity_type_display()} ({self.duration_minutes} min)"
         )

@@ -1,10 +1,12 @@
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from apps.accounts.models import UserProfile
-
+from apps.accounts.serializers import CurrentUserSerializer
 
 User = get_user_model()
 
@@ -135,4 +137,39 @@ class CurrentUserProfileTests(APITestCase):
             self.user.email,
             "patrick@example.com",
         )
-        
+
+    def test_invalid_timezone_is_rejected_without_updating_profile(self):
+        self.authenticate()
+        response = self.client.patch(
+            self.url,
+            {"profile": {"timezone": "Invalid/Timezone"}},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data["error"]["code"], "invalid_timezone")
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.timezone, "Asia/Ho_Chi_Minh")
+
+    def test_valid_timezone_can_be_updated(self):
+        self.authenticate()
+        response = self.client.patch(
+            self.url, {"profile": {"timezone": "Europe/London"}}, format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.timezone, "Europe/London")
+
+    def test_account_update_rolls_back_when_profile_save_fails(self):
+        serializer = CurrentUserSerializer(
+            self.user,
+            data={"first_name": "New name", "profile": {"display_name": "New display"}},
+            partial=True,
+        )
+        serializer.is_valid(raise_exception=True)
+        with patch.object(UserProfile, "save", side_effect=RuntimeError("write failed")):
+            with self.assertRaisesRegex(RuntimeError, "write failed"):
+                serializer.save()
+        self.user.refresh_from_db()
+        self.profile.refresh_from_db()
+        self.assertEqual(self.user.first_name, "Patrick")
+        self.assertEqual(self.profile.display_name, "Patrick")

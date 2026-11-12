@@ -7,6 +7,21 @@ class ActivityBreakdownSerializer(serializers.Serializer):
     sessions = serializers.IntegerField()
 
 
+class QuizProgressDaySerializer(serializers.Serializer):
+    date = serializers.DateField()
+    total_completed = serializers.IntegerField()
+    average_score = serializers.FloatField(allow_null=True)
+
+
+class QuizStatisticsSerializer(serializers.Serializer):
+    total_completed = serializers.IntegerField()
+    average_score = serializers.FloatField(allow_null=True)
+    best_score = serializers.IntegerField(allow_null=True)
+    recent_score = serializers.IntegerField(allow_null=True)
+    total_correct_answers = serializers.IntegerField()
+    progress_over_time = QuizProgressDaySerializer(many=True)
+
+
 class DashboardStatisticsSerializer(serializers.Serializer):
     date = serializers.DateField()
     timezone = serializers.CharField()
@@ -21,6 +36,5 @@ class DashboardStatisticsSerializer(serializers.Serializer):
     sessions_count = serializers.IntegerField()
     week_minutes = serializers.IntegerField()
 
-    activity_breakdown = ActivityBreakdownSerializer(
-        many=True
-    )
+    activity_breakdown = ActivityBreakdownSerializer(many=True)
+    quiz_statistics = QuizStatisticsSerializer()

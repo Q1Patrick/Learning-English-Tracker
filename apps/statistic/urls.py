@@ -6,5 +6,9 @@ app_name = "statistic"
 
 
 urlpatterns = [
-    path("dashboard/",DashboardStatisticsView.as_view(),name="dashboard",),
+    path(
+        "dashboard/",
+        DashboardStatisticsView.as_view(),
+        name="dashboard",
+    ),
 ]

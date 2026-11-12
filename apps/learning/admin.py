@@ -29,6 +29,4 @@ class StudySessionAdmin(admin.ModelAdmin):
         "updated_at",
     )
 
-    ordering = (
-        "-studied_at",
-    )
+    ordering = ("-studied_at",)

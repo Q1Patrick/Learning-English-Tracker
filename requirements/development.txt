@@ -1,1 +1,3 @@
 -r base.txt
+coverage[toml]==7.10.7
+ruff==0.14.6
