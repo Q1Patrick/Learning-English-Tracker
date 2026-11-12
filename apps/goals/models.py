@@ -51,17 +51,10 @@ class DailyGoal(models.Model):
                 name="unique_daily_goal_per_user_date",
             ),
             models.CheckConstraint(
-                check=(
-                    models.Q(target_minutes__gte=5)
-                    & models.Q(target_minutes__lte=480)
-                ),
+                check=(models.Q(target_minutes__gte=5) & models.Q(target_minutes__lte=480)),
                 name="daily_goal_target_between_5_and_480",
             ),
         ]
 
     def __str__(self):
-        return (
-            f"{self.user.email} - "
-            f"{self.target_date} - "
-            f"{self.target_minutes} min"
-        )
+        return f"{self.user.email} - {self.target_date} - {self.target_minutes} min"

@@ -4,7 +4,6 @@ from django.test import TestCase
 
 from apps.vocabulary.models import Vocabulary
 
-
 User = get_user_model()
 
 

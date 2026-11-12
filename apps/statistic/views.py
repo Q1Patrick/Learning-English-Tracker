@@ -10,13 +10,9 @@ class DashboardStatisticsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        statistics = build_dashboard_statistics(
-            request.user
-        )
+        statistics = build_dashboard_statistics(request.user)
 
-        serializer = DashboardStatisticsSerializer(
-            statistics
-        )
+        serializer = DashboardStatisticsSerializer(statistics)
 
         return Response(
             {

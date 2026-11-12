@@ -1,5 +1,4 @@
 from datetime import datetime, time, timedelta
-from zoneinfo import ZoneInfo
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, Sum
@@ -7,31 +6,9 @@ from django.utils import timezone
 
 from apps.goals.models import DailyGoal
 from apps.learning.models import StudySession
+from common.timezones import get_user_timezone
 
-
-DEFAULT_TIMEZONE = "Asia/Ho_Chi_Minh"
-
-
-def get_user_timezone(user):
-    timezone_name = DEFAULT_TIMEZONE
-
-    try:
-        profile_timezone = getattr(
-            user.profile,
-            "timezone",
-            None,
-        )
-
-        if profile_timezone:
-            timezone_name = profile_timezone
-
-    except ObjectDoesNotExist:
-        pass
-
-    try:
-        return ZoneInfo(timezone_name)
-    except Exception:
-        return ZoneInfo(DEFAULT_TIMEZONE)
+from .quiz_services import build_quiz_statistics
 
 
 def get_day_range(target_date, user_timezone):
@@ -95,13 +72,9 @@ def build_dashboard_statistics(user):
         sessions_count=Count("id"),
     )
 
-    studied_minutes = (
-        today_aggregate["total_minutes"] or 0
-    )
+    studied_minutes = today_aggregate["total_minutes"] or 0
 
-    sessions_count = (
-        today_aggregate["sessions_count"] or 0
-    )
+    sessions_count = today_aggregate["sessions_count"] or 0
 
     # -------------------------
     # Progress
@@ -131,8 +104,7 @@ def build_dashboard_statistics(user):
     # -------------------------
 
     activity_breakdown = list(
-        today_sessions
-        .values("activity_type")
+        today_sessions.values("activity_type")
         .annotate(
             minutes=Sum("duration_minutes"),
             sessions=Count("id"),
@@ -145,9 +117,7 @@ def build_dashboard_statistics(user):
     # Monday -> today
     # -------------------------
 
-    week_start_date = today - timedelta(
-        days=today.weekday()
-    )
+    week_start_date = today - timedelta(days=today.weekday())
 
     week_start, _ = get_day_range(
         week_start_date,
@@ -160,26 +130,18 @@ def build_dashboard_statistics(user):
         studied_at__lt=tomorrow_start,
     )
 
-    week_minutes = (
-        week_sessions.aggregate(
-            total=Sum("duration_minutes")
-        )["total"]
-        or 0
-    )
+    week_minutes = week_sessions.aggregate(total=Sum("duration_minutes"))["total"] or 0
 
     return {
         "date": today,
         "timezone": str(user_timezone),
-
         "target_minutes": target_minutes,
         "target_source": target_source,
-
         "studied_minutes": studied_minutes,
         "remaining_minutes": remaining_minutes,
         "progress_percent": progress_percent,
-
         "sessions_count": sessions_count,
         "week_minutes": week_minutes,
-
         "activity_breakdown": activity_breakdown,
+        "quiz_statistics": build_quiz_statistics(user, today=today, user_timezone=user_timezone),
     }

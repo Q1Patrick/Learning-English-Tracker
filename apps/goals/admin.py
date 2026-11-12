@@ -12,9 +12,7 @@ class DailyGoalAdmin(admin.ModelAdmin):
         "created_at",
     )
 
-    list_filter = (
-        "target_date",
-    )
+    list_filter = ("target_date",)
 
     search_fields = (
         "user__email",
@@ -27,6 +25,4 @@ class DailyGoalAdmin(admin.ModelAdmin):
         "updated_at",
     )
 
-    ordering = (
-        "-target_date",
-    )
+    ordering = ("-target_date",)

@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2480" height="2070" viewBox="0 0 2480 2070" role="img" aria-labelledby="title desc">
+<title id="title">Learning English Tracker · Database ERD</title>
+<desc id="desc">Ten database entities, primary and foreign keys, relationship cardinality, deletion rules, and quiz history snapshots.</desc>
+<rect width="2480" height="2070" fill="#f8fafc"/>
+<text x="80" y="62" fill="#23344d" font-family="Arial, DejaVu Sans, sans-serif" font-size="42" font-weight="700">Learning English Tracker · Database ERD</text>
+<text x="80" y="99" fill="#607086" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Person 3 domain · current model schema · 10 November 2026 · SQLite storage, Django relationships</text>
+<polyline points="520,300 640,300" fill="none" stroke="#296294" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="300,450 300,600" fill="none" stroke="#296294" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="300,450 300,540 860,540 860,600" fill="none" stroke="#296294" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="300,450 300,540 1420,540 1420,600" fill="none" stroke="#296294" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="300,180 300,130 2040,130 2040,180" fill="none" stroke="#296294" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="1320,470 1320,500 1680,500 1680,1070 1420,1070 1420,1120" fill="none" stroke="#296294" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="1420,1450 1420,1560" fill="none" stroke="#296294" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2040,630 2040,1120" fill="none" stroke="#296294" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="1640,300 1760,300" fill="none" stroke="#9060a8" stroke-width="3" stroke-linejoin="round" stroke-dasharray="11 8"/>
+<polyline points="1640,1250 1760,1250" fill="none" stroke="#9060a8" stroke-width="3" stroke-linejoin="round" stroke-dasharray="11 8"/>
+<polyline points="1640,1690 1700,1690 1700,1410 1760,1410" fill="none" stroke="#9060a8" stroke-width="3" stroke-linejoin="round" stroke-dasharray="11 8"/>
+<text x="310" y="585" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..N</text>
+<text x="312" y="164" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">1</text>
+<text x="316" y="486" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">1</text>
+<text x="548" y="286" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">1</text>
+<text x="588" y="286" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..1</text>
+<text x="870" y="585" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..N</text>
+<text x="1334" y="491" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">1</text>
+<text x="1430" y="585" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..N</text>
+<text x="1432" y="1106" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..N</text>
+<text x="1432" y="1475" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">1</text>
+<text x="1432" y="1546" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..N</text>
+<text x="1651" y="286" fill="#9060a8" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..1</text>
+<text x="1651" y="1236" fill="#9060a8" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..1</text>
+<text x="1652" y="1674" fill="#9060a8" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..1</text>
+<text x="1709" y="286" fill="#9060a8" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..N</text>
+<text x="1709" y="1236" fill="#9060a8" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..N</text>
+<text x="1709" y="1396" fill="#9060a8" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..N</text>
+<text x="2052" y="164" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..N</text>
+<text x="2052" y="657" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">1</text>
+<text x="2052" y="1106" fill="#296294" font-family="Arial, DejaVu Sans, sans-serif" font-size="18" font-weight="700">0..N</text>
+<rect x="80" y="180" width="440" height="270" rx="16" fill="#ffffff" stroke="#cdd6e1" stroke-width="2"/>
+<rect x="80" y="180" width="440" height="57" rx="16" fill="#245879" stroke="#245879" stroke-width="2"/>
+<text x="102" y="218" fill="#ffffff" font-family="Arial, DejaVu Sans, sans-serif" font-size="27" font-weight="700">User</text>
+<text x="102" y="259" fill="#65758a" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="15" font-weight="400">accounts_user</text>
+<text x="102" y="282" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">PK id: BIGINT (auto)</text>
+<text x="102" y="309" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">email: varchar(254) UNIQUE</text>
+<text x="102" y="336" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">password: Django hash</text>
+<text x="102" y="363" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">first_name / last_name</text>
+<text x="102" y="390" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">is_email_verified = false</text>
+<text x="102" y="417" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">inherited auth flags / dates</text>
+<rect x="640" y="180" width="440" height="290" rx="16" fill="#ffffff" stroke="#cdd6e1" stroke-width="2"/>
+<rect x="640" y="180" width="440" height="57" rx="16" fill="#245879" stroke="#245879" stroke-width="2"/>
+<text x="662" y="218" fill="#ffffff" font-family="Arial, DejaVu Sans, sans-serif" font-size="27" font-weight="700">UserProfile</text>
+<text x="662" y="259" fill="#65758a" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="15" font-weight="400">accounts_userprofile</text>
+<text x="662" y="282" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">PK id: BIGINT (auto)</text>
+<text x="662" y="309" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK user_id: BIGINT UNIQUE</text>
+<text x="662" y="336" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">display_name: varchar(100)</text>
+<text x="662" y="363" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">english_level: A1..C2</text>
+<text x="662" y="390" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">daily_target_minutes = 30</text>
+<text x="662" y="417" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">timezone = Asia/Ho_Chi_Minh</text>
+<rect x="80" y="600" width="440" height="360" rx="16" fill="#ffffff" stroke="#cdd6e1" stroke-width="2"/>
+<rect x="80" y="600" width="440" height="57" rx="16" fill="#245879" stroke="#245879" stroke-width="2"/>
+<text x="102" y="638" fill="#ffffff" font-family="Arial, DejaVu Sans, sans-serif" font-size="27" font-weight="700">Vocabulary</text>
+<text x="102" y="679" fill="#65758a" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="15" font-weight="400">vocabulary_vocabulary</text>
+<text x="102" y="702" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">PK id: UUID</text>
+<text x="102" y="729" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK user_id: BIGINT</text>
+<text x="102" y="756" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">word / meaning / translation</text>
+<text x="102" y="783" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">part_of_speech / mastery_level</text>
+<text x="102" y="810" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">example_sentence / notes</text>
+<text x="102" y="837" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">UQ (user_id, word)</text>
+<text x="102" y="864" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">IDX (user_id, mastery_level)</text>
+<rect x="640" y="600" width="440" height="360" rx="16" fill="#ffffff" stroke="#cdd6e1" stroke-width="2"/>
+<rect x="640" y="600" width="440" height="57" rx="16" fill="#245879" stroke="#245879" stroke-width="2"/>
+<text x="662" y="638" fill="#ffffff" font-family="Arial, DejaVu Sans, sans-serif" font-size="27" font-weight="700">StudySession</text>
+<text x="662" y="679" fill="#65758a" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="15" font-weight="400">learning_studysession</text>
+<text x="662" y="702" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">PK id: UUID</text>
+<text x="662" y="729" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK user_id: BIGINT</text>
+<text x="662" y="756" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">activity_type / notes</text>
+<text x="662" y="783" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">duration_minutes: 1..720 API</text>
+<text x="662" y="810" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">score: 0..100 API, NULL allowed</text>
+<text x="662" y="837" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">studied_at: aware datetime</text>
+<text x="662" y="864" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">IDX (user_id, -studied_at)</text>
+<rect x="1200" y="600" width="440" height="320" rx="16" fill="#ffffff" stroke="#cdd6e1" stroke-width="2"/>
+<rect x="1200" y="600" width="440" height="57" rx="16" fill="#245879" stroke="#245879" stroke-width="2"/>
+<text x="1222" y="638" fill="#ffffff" font-family="Arial, DejaVu Sans, sans-serif" font-size="27" font-weight="700">DailyGoal</text>
+<text x="1222" y="679" fill="#65758a" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="15" font-weight="400">goals_dailygoal</text>
+<text x="1222" y="702" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">PK id: UUID</text>
+<text x="1222" y="729" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK user_id: BIGINT</text>
+<text x="1222" y="756" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">target_date: date</text>
+<text x="1222" y="783" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">target_minutes: 5..480 DB</text>
+<text x="1222" y="810" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">notes: varchar(255)</text>
+<text x="1222" y="837" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">UQ (user_id, target_date)</text>
+<rect x="1200" y="180" width="440" height="290" rx="16" fill="#ffffff" stroke="#cdd6e1" stroke-width="2"/>
+<rect x="1200" y="180" width="440" height="57" rx="16" fill="#8c6333" stroke="#8c6333" stroke-width="2"/>
+<text x="1222" y="218" fill="#ffffff" font-family="Arial, DejaVu Sans, sans-serif" font-size="27" font-weight="700">Quiz</text>
+<text x="1222" y="259" fill="#65758a" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="15" font-weight="400">quizzes_quiz</text>
+<text x="1222" y="282" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">PK id: UUID</text>
+<text x="1222" y="309" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">title: varchar(200)</text>
+<text x="1222" y="336" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">description: text</text>
+<text x="1222" y="363" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">difficulty = beginner</text>
+<text x="1222" y="390" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">is_active = true</text>
+<text x="1222" y="417" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">created_at / updated_at</text>
+<rect x="1200" y="1120" width="440" height="330" rx="16" fill="#ffffff" stroke="#cdd6e1" stroke-width="2"/>
+<rect x="1200" y="1120" width="440" height="57" rx="16" fill="#8c6333" stroke="#8c6333" stroke-width="2"/>
+<text x="1222" y="1158" fill="#ffffff" font-family="Arial, DejaVu Sans, sans-serif" font-size="27" font-weight="700">Question</text>
+<text x="1222" y="1199" fill="#65758a" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="15" font-weight="400">quizzes_question</text>
+<text x="1222" y="1222" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">PK id: UUID</text>
+<text x="1222" y="1249" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK quiz_id: UUID</text>
+<text x="1222" y="1276" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">text: text</text>
+<text x="1222" y="1303" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">question_type = multiple_choice</text>
+<text x="1222" y="1330" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">explanation: text</text>
+<text x="1222" y="1357" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">order = 1</text>
+<text x="1222" y="1384" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">created_at / updated_at</text>
+<rect x="1200" y="1560" width="440" height="300" rx="16" fill="#ffffff" stroke="#cdd6e1" stroke-width="2"/>
+<rect x="1200" y="1560" width="440" height="57" rx="16" fill="#8c6333" stroke="#8c6333" stroke-width="2"/>
+<text x="1222" y="1598" fill="#ffffff" font-family="Arial, DejaVu Sans, sans-serif" font-size="27" font-weight="700">Choice</text>
+<text x="1222" y="1639" fill="#65758a" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="15" font-weight="400">quizzes_choice</text>
+<text x="1222" y="1662" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">PK id: UUID</text>
+<text x="1222" y="1689" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK question_id: UUID</text>
+<text x="1222" y="1716" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">text: varchar(255)</text>
+<text x="1222" y="1743" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">is_correct = false</text>
+<text x="1222" y="1770" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">order = 1</text>
+<text x="1222" y="1797" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">created_at / updated_at</text>
+<rect x="1760" y="180" width="560" height="450" rx="16" fill="#ffffff" stroke="#cdd6e1" stroke-width="2"/>
+<rect x="1760" y="180" width="560" height="57" rx="16" fill="#79518e" stroke="#79518e" stroke-width="2"/>
+<text x="1782" y="218" fill="#ffffff" font-family="Arial, DejaVu Sans, sans-serif" font-size="27" font-weight="700">QuizAttempt</text>
+<text x="1782" y="259" fill="#65758a" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="15" font-weight="400">quizzes_quizattempt</text>
+<text x="1782" y="282" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">PK id: UUID</text>
+<text x="1782" y="309" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK user_id: BIGINT [CASCADE]</text>
+<text x="1782" y="336" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK quiz_id: UUID NULL [SET_NULL]</text>
+<text x="1782" y="363" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">quiz ID / title snapshots</text>
+<text x="1782" y="390" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">score: 0..100 DB</text>
+<text x="1782" y="417" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">correct_answers &lt;= total_questions DB</text>
+<text x="1782" y="444" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">completed_at / idempotency_key</text>
+<text x="1782" y="471" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">UQ (user_id, idempotency_key)</text>
+<text x="1782" y="498" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">IDX (user_id, -completed_at, -id)</text>
+<text x="1782" y="525" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">IDX (-completed_at, -id)</text>
+<rect x="1760" y="1120" width="560" height="460" rx="16" fill="#ffffff" stroke="#cdd6e1" stroke-width="2"/>
+<rect x="1760" y="1120" width="560" height="57" rx="16" fill="#79518e" stroke="#79518e" stroke-width="2"/>
+<text x="1782" y="1158" fill="#ffffff" font-family="Arial, DejaVu Sans, sans-serif" font-size="27" font-weight="700">QuizAttemptAnswer</text>
+<text x="1782" y="1199" fill="#65758a" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="15" font-weight="400">quizzes_quizattemptanswer</text>
+<text x="1782" y="1222" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">PK id: UUID</text>
+<text x="1782" y="1249" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK attempt_id: UUID [CASCADE]</text>
+<text x="1782" y="1276" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK question_id: UUID NULL [SET_NULL]</text>
+<text x="1782" y="1303" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">FK choice_id: UUID NULL [SET_NULL]</text>
+<text x="1782" y="1330" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">source UUID snapshots</text>
+<text x="1782" y="1357" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">question / choice / correct text</text>
+<text x="1782" y="1384" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">explanation snapshot</text>
+<text x="1782" y="1411" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">is_correct: bool snapshot</text>
+<text x="1782" y="1438" fill="#23344d" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">order: non-negative integer</text>
+<text x="1782" y="1465" fill="#215c86" font-family="Menlo, DejaVu Sans Mono, monospace" font-size="17" font-weight="400">UQ (attempt_id, question_id_snapshot)</text>
+<rect x="80" y="1120" width="1000" height="700" rx="16" fill="#eef4fa" stroke="#d5e1ed" stroke-width="2"/>
+<text x="108" y="1168" fill="#23344d" font-family="Arial, DejaVu Sans, sans-serif" font-size="29" font-weight="700">Read the model, then the relationship</text>
+<text x="108" y="1220" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">QuizAttemptAnswer is the UserAnswer requested in Person3.md.</text>
+<text x="108" y="1259" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">User and UserProfile IDs are integers; core and quiz record IDs are UUIDs.</text>
+<text x="108" y="1298" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Every Profile has one User. A User may have no Profile in raw DB state.</text>
+<text x="108" y="1337" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Deleting a Quiz cascades to its Questions and Choices.</text>
+<text x="108" y="1376" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Attempts remain: their live quiz FK becomes NULL.</text>
+<text x="108" y="1415" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Deleting source Question/Choice sets answer source FKs to NULL.</text>
+<text x="108" y="1454" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Submitted UUIDs, text, correctness and explanation remain snapshots.</text>
+<text x="108" y="1493" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Deleting an Attempt cascades to its submitted answers.</text>
+<text x="108" y="1532" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Deleting a User cascades to that user&#x27;s owned learning history.</text>
+<text x="108" y="1571" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Model/API validators are not automatically database CHECK constraints.</text>
+<text x="108" y="1610" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Only multiple_choice is currently scoreable; other types stay explicit.</text>
+<text x="108" y="1649" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Auth Group/Permission tables and AI are outside this ten-model view.</text>
+<text x="108" y="1688" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Source: current Django models and forward migrations after P3-08.</text>
+<text x="108" y="1727" fill="#43566f" font-family="Arial, DejaVu Sans, sans-serif" font-size="22" font-weight="400">Full field/default/index rules: docs/DATABASE.md.</text>
+<text x="80" y="1935" fill="#23344d" font-family="Arial, DejaVu Sans, sans-serif" font-size="24" font-weight="700">RELATIONSHIP LEGEND</text>
+<text x="80" y="1972" fill="#23344d" font-family="Arial, DejaVu Sans, sans-serif" font-size="21" font-weight="400">Solid: CASCADE     Dashed: SET_NULL (nullable source FK)     1 / 0..1 / 0..N: cardinality at each entity</text>
+<text x="80" y="2008" fill="#607086" font-family="Arial, DejaVu Sans, sans-serif" font-size="20" font-weight="400">The blue User branches share a bus. PK/FK types reflect the current models; see docs/DATABASE.md for complete fields and rules.</text>
+</svg>

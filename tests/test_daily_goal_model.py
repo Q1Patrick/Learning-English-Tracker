@@ -7,7 +7,6 @@ from django.test import TestCase
 
 from apps.goals.models import DailyGoal
 
-
 User = get_user_model()
 
 

@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "title": "Learning English Tracker · Database ERD",
+  "subtitle": "Person 3 domain · current model schema · 10 November 2026 · SQLite storage, Django relationships",
+  "canvas": {"width": 2480, "height": 2070},
+  "entities": [
+    {"id":"user","x":80,"y":180,"width":440,"height":270,"title":"User","table":"accounts_user","color":"#245879","rows":["PK id: BIGINT (auto)","email: varchar(254) UNIQUE","password: Django hash","first_name / last_name","is_email_verified = false","inherited auth flags / dates"]},
+    {"id":"profile","x":640,"y":180,"width":440,"height":290,"title":"UserProfile","table":"accounts_userprofile","color":"#245879","rows":["PK id: BIGINT (auto)","FK user_id: BIGINT UNIQUE","display_name: varchar(100)","english_level: A1..C2","daily_target_minutes = 30","timezone = Asia/Ho_Chi_Minh"]},
+    {"id":"vocab","x":80,"y":600,"width":440,"height":360,"title":"Vocabulary","table":"vocabulary_vocabulary","color":"#245879","rows":["PK id: UUID","FK user_id: BIGINT","word / meaning / translation","part_of_speech / mastery_level","example_sentence / notes","UQ (user_id, word)","IDX (user_id, mastery_level)"]},
+    {"id":"study","x":640,"y":600,"width":440,"height":360,"title":"StudySession","table":"learning_studysession","color":"#245879","rows":["PK id: UUID","FK user_id: BIGINT","activity_type / notes","duration_minutes: 1..720 API","score: 0..100 API, NULL allowed","studied_at: aware datetime","IDX (user_id, -studied_at)"]},
+    {"id":"goal","x":1200,"y":600,"width":440,"height":320,"title":"DailyGoal","table":"goals_dailygoal","color":"#245879","rows":["PK id: UUID","FK user_id: BIGINT","target_date: date","target_minutes: 5..480 DB","notes: varchar(255)","UQ (user_id, target_date)"]},
+    {"id":"quiz","x":1200,"y":180,"width":440,"height":290,"title":"Quiz","table":"quizzes_quiz","color":"#8c6333","rows":["PK id: UUID","title: varchar(200)","description: text","difficulty = beginner","is_active = true","created_at / updated_at"]},
+    {"id":"question","x":1200,"y":1120,"width":440,"height":330,"title":"Question","table":"quizzes_question","color":"#8c6333","rows":["PK id: UUID","FK quiz_id: UUID","text: text","question_type = multiple_choice","explanation: text","order = 1","created_at / updated_at"]},
+    {"id":"choice","x":1200,"y":1560,"width":440,"height":300,"title":"Choice","table":"quizzes_choice","color":"#8c6333","rows":["PK id: UUID","FK question_id: UUID","text: varchar(255)","is_correct = false","order = 1","created_at / updated_at"]},
+    {"id":"attempt","x":1760,"y":180,"width":560,"height":450,"title":"QuizAttempt","table":"quizzes_quizattempt","color":"#79518e","rows":["PK id: UUID","FK user_id: BIGINT [CASCADE]","FK quiz_id: UUID NULL [SET_NULL]","quiz ID / title snapshots","score: 0..100 DB","correct_answers <= total_questions DB","completed_at / idempotency_key","UQ (user_id, idempotency_key)","IDX (user_id, -completed_at, -id)","IDX (-completed_at, -id)"]},
+    {"id":"answer","x":1760,"y":1120,"width":560,"height":460,"title":"QuizAttemptAnswer","table":"quizzes_quizattemptanswer","color":"#79518e","rows":["PK id: UUID","FK attempt_id: UUID [CASCADE]","FK question_id: UUID NULL [SET_NULL]","FK choice_id: UUID NULL [SET_NULL]","source UUID snapshots","question / choice / correct text","explanation snapshot","is_correct: bool snapshot","order: non-negative integer","UQ (attempt_id, question_id_snapshot)"]}
+  ],
+  "relationships": [
+    {"from":"user","to":"profile","kind":"cascade","points":[[520,300],[640,300]],"labels":[{"x":548,"y":286,"text":"1"},{"x":588,"y":286,"text":"0..1"}]},
+    {"from":"user","to":"vocab","kind":"cascade","points":[[300,450],[300,600]],"labels":[{"x":316,"y":486,"text":"1"},{"x":310,"y":585,"text":"0..N"}]},
+    {"from":"user","to":"study","kind":"cascade","points":[[300,450],[300,540],[860,540],[860,600]],"labels":[{"x":316,"y":486,"text":"1"},{"x":870,"y":585,"text":"0..N"}]},
+    {"from":"user","to":"goal","kind":"cascade","points":[[300,450],[300,540],[1420,540],[1420,600]],"labels":[{"x":316,"y":486,"text":"1"},{"x":1430,"y":585,"text":"0..N"}]},
+    {"from":"user","to":"attempt","kind":"cascade","points":[[300,180],[300,130],[2040,130],[2040,180]],"labels":[{"x":312,"y":164,"text":"1"},{"x":2052,"y":164,"text":"0..N"}]},
+    {"from":"quiz","to":"question","kind":"cascade","points":[[1320,470],[1320,500],[1680,500],[1680,1070],[1420,1070],[1420,1120]],"labels":[{"x":1334,"y":491,"text":"1"},{"x":1432,"y":1106,"text":"0..N"}]},
+    {"from":"question","to":"choice","kind":"cascade","points":[[1420,1450],[1420,1560]],"labels":[{"x":1432,"y":1475,"text":"1"},{"x":1432,"y":1546,"text":"0..N"}]},
+    {"from":"attempt","to":"answer","kind":"cascade","points":[[2040,630],[2040,1120]],"labels":[{"x":2052,"y":657,"text":"1"},{"x":2052,"y":1106,"text":"0..N"}]},
+    {"from":"quiz","to":"attempt","kind":"set_null","points":[[1640,300],[1760,300]],"labels":[{"x":1651,"y":286,"text":"0..1"},{"x":1709,"y":286,"text":"0..N"}]},
+    {"from":"question","to":"answer","kind":"set_null","points":[[1640,1250],[1760,1250]],"labels":[{"x":1651,"y":1236,"text":"0..1"},{"x":1709,"y":1236,"text":"0..N"}]},
+    {"from":"choice","to":"answer","kind":"set_null","points":[[1640,1690],[1700,1690],[1700,1410],[1760,1410]],"labels":[{"x":1652,"y":1674,"text":"0..1"},{"x":1709,"y":1396,"text":"0..N"}]}
+  ],
+  "notes": {
+    "x":80,"y":1120,"width":1000,"height":700,"title":"Read the model, then the relationship",
+    "lines":[
+      "QuizAttemptAnswer is the UserAnswer requested in Person3.md.",
+      "User and UserProfile IDs are integers; core and quiz record IDs are UUIDs.",
+      "Every Profile has one User. A User may have no Profile in raw DB state.",
+      "Deleting a Quiz cascades to its Questions and Choices.",
+      "Attempts remain: their live quiz FK becomes NULL.",
+      "Deleting source Question/Choice sets answer source FKs to NULL.",
+      "Submitted UUIDs, text, correctness and explanation remain snapshots.",
+      "Deleting an Attempt cascades to its submitted answers.",
+      "Deleting a User cascades to that user's owned learning history.",
+      "Model/API validators are not automatically database CHECK constraints.",
+      "Only multiple_choice is currently scoreable; other types stay explicit.",
+      "Auth Group/Permission tables and AI are outside this ten-model view.",
+      "Source: current Django models and forward migrations after P3-08.",
+      "Full field/default/index rules: docs/DATABASE.md."
+    ]
+  }
+}

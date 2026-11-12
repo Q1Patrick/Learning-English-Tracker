@@ -4,7 +4,6 @@ from django.test import TestCase
 
 from apps.learning.models import StudySession
 
-
 User = get_user_model()
 
 

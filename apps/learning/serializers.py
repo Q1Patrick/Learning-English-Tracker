@@ -25,14 +25,10 @@ class StudySessionSerializer(serializers.ModelSerializer):
 
     def validate_duration_minutes(self, value):
         if value < 1:
-            raise serializers.ValidationError(
-                "Duration must be at least 1 minute."
-            )
+            raise serializers.ValidationError("Duration must be at least 1 minute.")
 
         if value > 720:
-            raise serializers.ValidationError(
-                "Duration cannot exceed 720 minutes."
-            )
+            raise serializers.ValidationError("Duration cannot exceed 720 minutes.")
 
         return value
 
@@ -41,8 +37,6 @@ class StudySessionSerializer(serializers.ModelSerializer):
             return value
 
         if value < 0 or value > 100:
-            raise serializers.ValidationError(
-                "Score must be between 0 and 100."
-            )
+            raise serializers.ValidationError("Score must be between 0 and 100.")
 
         return value

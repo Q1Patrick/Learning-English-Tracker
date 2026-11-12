@@ -5,7 +5,6 @@ from .views import (
     DailyGoalListCreateView,
 )
 
-
 app_name = "goals"
 
 
