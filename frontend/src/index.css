@@ -1,0 +1,4 @@
+@import './shared/styles/global.css';
+
+/* Luồng import: main.tsx → index.css → global.css → tokens.css.
+   App.tsx nạp layouts.css; chỉ thêm quy tắc riêng layout tại file đó. */
