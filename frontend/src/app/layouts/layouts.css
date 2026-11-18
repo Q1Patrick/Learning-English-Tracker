@@ -1,0 +1,477 @@
+/* FE-02.6 — hình học theo desktop đã duyệt; màu/font dùng tokens.css.
+   Khi debug: kiểm tra token trong DevTools > Computed trước khi đổi selector.
+   Các số lẻ 19/29/49/245px là số đo thiết kế, không làm tròn sang spacing khác. */
+.app-shell,
+.public-shell,
+.auth-shell {
+  min-height: 100dvh;
+  color: var(--color-ink);
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  background: var(--color-bg);
+}
+
+.app-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, var(--color-sidebar-start), var(--color-sidebar-end));
+}
+
+.app-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-width: 0;
+  max-width: 100%;
+  padding: var(--space-7) 0 var(--space-6) var(--space-8);
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+/* Logo/vector giữ kích thước gốc; chỉ phần chữ được co hoặc xuống dòng. */
+.app-sidebar__brand img {
+  flex: 0 0 var(--brand-size);
+  width: var(--brand-size);
+  height: var(--brand-size);
+  object-fit: contain;
+}
+
+.app-sidebar__brand strong {
+  min-width: 0;
+  font-size: var(--font-size-brand);
+  font-weight: var(--font-weight-bold);
+  line-height: calc(var(--font-size-brand) * 4 / 3); /* 24px ở font mặc định; co giãn theo rem. */
+  overflow-wrap: anywhere;
+}
+
+.app-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sidebar-nav-gap);
+  padding: var(--space-1) var(--space-4) var(--space-6);
+}
+
+.app-sidebar__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sidebar-nav-gap);
+  margin-top: var(--space-7);
+}
+
+.app-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-width: 0;
+  min-height: var(--sidebar-link-height);
+  padding: var(--space-3) var(--sidebar-link-inset-inline);
+  border-radius: var(--radius-panel);
+  color: var(--color-ink);
+  text-align: left;
+  text-decoration: none;
+}
+
+.app-sidebar__link > span:not(.layout-icon) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.app-sidebar__link:hover {
+  background: var(--color-hover);
+}
+
+.app-sidebar__link.active,
+.app-sidebar__link[aria-current='page'] {
+  color: var(--color-on-active);
+  /* Giữ gradient FE-02.5: chữ trắng đạt tương phản tối thiểu 4.5:1. */
+  background: linear-gradient(100deg, var(--color-active-start), var(--color-active-end));
+  font-weight: var(--font-weight-medium);
+}
+
+.app-sidebar__icon {
+  flex: 0 0 var(--layout-icon-size);
+  width: var(--layout-icon-size);
+  height: var(--layout-icon-size);
+}
+
+.layout-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--layout-icon-size);
+  height: var(--layout-icon-size);
+  background-color: currentColor;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.app-sidebar__link[aria-disabled='true'] {
+  gap: var(--space-4);
+  color: var(--color-muted);
+  background: transparent;
+  font-size: var(--font-size-body);
+  cursor: not-allowed;
+}
+
+.app-sidebar__link > small {
+  margin-left: auto;
+  color: var(--color-muted);
+  font-size: var(--font-size-caption);
+  white-space: nowrap;
+}
+
+.app-shell__body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-width: 0;
+  height: var(--header-height);
+  padding: var(--header-inset-block) var(--content-inset-inline) var(--header-inset-block) var(--header-inset-start);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.app-header__search {
+  position: relative;
+  display: flex;
+  flex: 0 1 var(--search-width);
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+  height: var(--search-height);
+  margin: 0;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+}
+
+.app-header__search-icon {
+  flex: 0 0 var(--search-icon-size);
+  width: var(--search-icon-size);
+  height: var(--search-icon-size);
+  color: var(--color-muted);
+}
+
+.app-header__search-input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  color: var(--color-ink);
+  background: transparent;
+}
+
+.app-header__search-input::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+.app-header__search-results {
+  position: absolute;
+  z-index: var(--z-search);
+  top: calc(100% + var(--space-2));
+  right: 0;
+  left: 0;
+  /* Viewport thấp vẫn cuộn được kết quả; desktop đủ cao giữ giới hạn 320px. */
+  max-height: min(320px, calc(100dvh - var(--header-height) - var(--space-12)));
+  margin: 0;
+  padding: var(--space-2);
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-search);
+}
+
+.app-header__search-results a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px var(--space-3);
+  border-radius: var(--radius-small);
+  color: var(--color-ink);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.app-header__search-results ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-header__search-results a > svg {
+  flex: 0 0 18px;
+}
+
+.app-header__search-results a:hover,
+.app-header__search-results a:focus-visible {
+  background: var(--color-hover);
+}
+
+.app-header__search-results p {
+  margin: 0;
+  padding: 10px var(--space-3);
+  color: var(--color-muted);
+  overflow-wrap: anywhere;
+}
+
+.app-header__actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-9);
+  margin-left: auto;
+}
+
+.app-header__icon-button {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 var(--control-target-size);
+  align-items: center;
+  justify-content: center;
+  width: var(--control-target-size);
+  height: var(--control-target-size);
+  padding: 10px;
+  border: 0;
+  border-radius: var(--radius-control);
+  color: var(--color-ink);
+  background: transparent;
+  cursor: pointer;
+}
+
+.app-header__menu-button {
+  display: none;
+}
+
+.app-header__icon-button:disabled {
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.app-header__coming-soon {
+  position: absolute;
+  top: calc(100% - var(--space-1));
+  left: 50%;
+  color: var(--color-muted);
+  font-size: var(--font-size-caption);
+  line-height: 1.4;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.app-header__profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: var(--profile-min-width);
+  color: var(--color-heading);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.app-header__avatar {
+  display: inline-flex;
+  flex: 0 0 var(--avatar-size);
+  align-items: center;
+  justify-content: center;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: var(--radius-circle);
+  color: var(--color-link);
+  background: var(--color-avatar);
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-7) var(--content-inset-inline);
+}
+
+.app-main h1,
+.public-main h1,
+.auth-main h1 {
+  margin: 0 0 var(--space-4);
+  color: var(--color-heading);
+  font-size: var(--font-size-heading);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-heading);
+}
+
+/* Chữ dài được xuống dòng, không che lỗi bằng overflow-x: hidden. */
+:where(.app-main, .public-main, .auth-main) :where(h1, p, a) {
+  overflow-wrap: anywhere;
+}
+
+.public-shell,
+.auth-shell {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+}
+
+.public-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding: var(--space-5) var(--space-8);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.public-header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+  max-width: 100%;
+  color: var(--color-heading);
+  font-size: var(--font-size-brand);
+  font-weight: var(--font-weight-bold);
+  line-height: calc(var(--font-size-brand) * 4 / 3);
+  text-decoration: none;
+}
+
+.public-header__brand > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.public-header__brand img {
+  flex: 0 0 var(--brand-size);
+  width: var(--brand-size);
+  height: var(--brand-size);
+  object-fit: contain;
+}
+
+.public-header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.public-header__nav a {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.public-header__nav a[aria-current='page'] {
+  color: var(--color-link);
+  font-weight: var(--font-weight-medium);
+}
+
+.public-main {
+  flex: 1;
+  width: min(100%, var(--public-content-max));
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-8);
+}
+
+.auth-main {
+  display: grid;
+  flex: 1;
+  align-content: center;
+  gap: var(--space-6);
+  width: min(100%, var(--auth-content-max));
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-8);
+}
+
+.auth-shell--register .auth-main {
+  min-height: 100dvh;
+}
+
+/* <1024px: disclosure trong luồng trang, không phải drawer/modal.
+   Giữ mốc đã duyệt; CSS var không dùng được trong điều kiện @media. */
+@media (max-width: 1023px) {
+  .app-shell {
+    display: block;
+  }
+
+  .app-sidebar {
+    display: none;
+    position: static;
+    height: auto;
+  }
+
+  .app-sidebar.is-open {
+    display: block;
+  }
+
+  .app-header {
+    gap: var(--space-3);
+    padding-right: var(--space-4);
+    padding-left: var(--space-4);
+  }
+
+  .app-header__menu-button {
+    display: inline-flex;
+  }
+
+  .app-header__actions {
+    gap: var(--space-2);
+  }
+
+  .app-header__profile {
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .app-header__search {
+    flex: 1;
+    gap: var(--space-2);
+    padding-right: var(--space-3);
+    padding-left: var(--space-3);
+  }
+
+  .app-main {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .public-header,
+  .public-header__nav {
+    flex-wrap: wrap;
+  }
+
+  .public-main {
+    padding: var(--space-8) var(--space-5);
+  }
+}
+
+/* <480px: ô tìm trang xuống hàng riêng để vẫn nhập được ở 320px.
+   Đây là responsive cơ bản; bản mobile Figma sẽ được TV4 duyệt riêng. */
+@media (max-width: 479px) {
+  .app-header {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: var(--header-height);
+  }
+
+  .app-header__search {
+    order: 1;
+    flex-basis: 100%;
+  }
+
+  .public-header {
+    padding: var(--space-5);
+  }
+
+  .public-header__nav {
+    gap: var(--space-5);
+  }
+}
