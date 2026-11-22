@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router'
 
 import Header from './Header'
 import Sidebar from './Sidebar'
+import SessionStatus from '../../features/auth/SessionStatus'
 
 // Layout chỉ tổ chức giao diện. Bảo vệ các trang bằng phiên thật thuộc phần auth.
 export default function MainLayout() {
@@ -60,6 +61,7 @@ export default function MainLayout() {
           menuButtonRef={menuButtonRef}
         />
         <main ref={mainRef} id="main-content" className="app-main" tabIndex={-1}>
+          <SessionStatus />
           <Outlet />
         </main>
       </div>

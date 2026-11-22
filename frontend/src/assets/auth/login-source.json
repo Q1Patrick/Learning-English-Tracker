@@ -1,0 +1,18 @@
+{
+  "source": "User-provided Login.png, 1556x1091",
+  "sourceSha256": "f20b3588d797a4cf92a352f2ce92cbb2427a5ca4397d9bcb89a6c8dbcc329696",
+  "method": "Original decorative region only, Pillow crop and lossless WebP",
+  "figmaContextUnavailable": "MCP Starter quota exhausted",
+  "file": "login-illustration.webp",
+  "box": [
+    1,
+    101,
+    820,
+    974
+  ],
+  "width": 819,
+  "height": 873,
+  "pixelIdentityVerified": true,
+  "sourceUnchanged": true,
+  "excludesFormHeaderAndPersonalContactFooter": true
+}

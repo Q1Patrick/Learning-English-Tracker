@@ -1,0 +1,68 @@
+{
+  "source": "User-provided Register.png",
+  "sourceSha256": "3b39c02f1873ee02b14c05737daa345830bb99e88c0639a448fa376b4ce7a90b",
+  "method": "Pillow crop + lossless encoding only; decoded pixels and source file retained",
+  "authorization": "User delegated closest available Figma source after the asset-source question",
+  "assets": [
+    {
+      "file": "register-illustration.webp",
+      "box": [
+        1,
+        1,
+        756,
+        1090
+      ],
+      "width": 755,
+      "height": 1089,
+      "pixelIdentityVerified": true
+    },
+    {
+      "file": "register-cap.png",
+      "box": [
+        1054,
+        43,
+        1190,
+        154
+      ],
+      "width": 136,
+      "height": 111,
+      "pixelIdentityVerified": true
+    },
+    {
+      "file": "register-email.png",
+      "box": [
+        882,
+        368,
+        922,
+        407
+      ],
+      "width": 40,
+      "height": 39,
+      "pixelIdentityVerified": true
+    },
+    {
+      "file": "register-lock.png",
+      "box": [
+        888,
+        486,
+        927,
+        526
+      ],
+      "width": 39,
+      "height": 40,
+      "pixelIdentityVerified": true
+    },
+    {
+      "file": "register-eye-off.png",
+      "box": [
+        1344,
+        481,
+        1395,
+        532
+      ],
+      "width": 51,
+      "height": 51,
+      "pixelIdentityVerified": true
+    }
+  ]
+}

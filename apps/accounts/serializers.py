@@ -108,6 +108,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(TokenObtainPairSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Preserve the same password accepted at registration, including whitespace.
+        self.fields["password"].trim_whitespace = False
+
     def validate(self, attrs):
         data = super().validate(attrs)
 

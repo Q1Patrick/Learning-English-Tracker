@@ -1,0 +1,199 @@
+/* FE-03.3 — Register A ba field. Hình/màu lấy từ Register.png được người dùng cung cấp.
+   Chỉ scope auth/Register, không đổi geometry Sidebar/Header đã nghiệm thu. */
+.auth-shell--register .auth-main {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.register-page {
+  display: grid;
+  grid-template-columns: minmax(0, 756fr) minmax(0, 799fr);
+  min-height: 100dvh;
+  color: #000;
+  background: #fff;
+}
+
+.register-page__visual {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  background: #7ecbfb;
+}
+
+.register-page__visual > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.register-page__panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: clamp(24px, 4vw, 64px);
+}
+
+.register-page__content {
+  width: min(100%, 548px);
+}
+
+.register-page__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.register-page__heading > img {
+  width: 136px;
+  height: 111px;
+  object-fit: contain;
+}
+
+/* Thêm scope Register để không bị typography .auth-main h1 của shell ghi đè khi CSS load sau. */
+.register-page .register-page__heading h1 {
+  margin: 8px 0 0;
+  color: #2259ab;
+  font-size: 2.5rem;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.register-form {
+  display: grid;
+  gap: 22px;
+  /* Border rõ hơn ảnh gốc để field trắng vẫn nhận biết được; shadow/radius giữ ngôn ngữ Figma. */
+  --auth-field-radius: 20px;
+  --auth-field-icon-size: 40px;
+  --auth-field-text-color: #1d1b20;
+}
+
+.register-form .auth-field__control {
+  box-shadow: 0 4px 4px rgb(0 0 0 / 22%);
+}
+
+/* Icon cắt từ PNG có nền trắng: giữ control trắng cả lúc chờ, tránh ô trắng lệch nền. */
+.register-form .auth-field[data-disabled='true'] .auth-field__control {
+  background: #fff;
+}
+
+.register-form .auth-field__toggle {
+  width: 56px;
+  height: 56px;
+  padding: 2.5px;
+  color: #1d1b20;
+}
+
+.register-form .auth-field__toggle > span {
+  width: 51px;
+  height: 51px;
+}
+
+.register-form__submit {
+  min-height: 74px;
+  margin-top: 14px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 20px;
+  color: #fff;
+  background: #2872e0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.25;
+  cursor: pointer;
+}
+
+.register-form__submit:hover:not(:disabled) {
+  background: #205fbd;
+}
+
+.register-form__submit:disabled {
+  background: #426ba9;
+  cursor: wait;
+}
+
+.register-page__login {
+  margin: 36px 0 0;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.register-page__login a { color: #0000ee; }
+
+.auth-form-error {
+  padding: 14px 16px;
+  border: 1px solid #b91c1c;
+  border-radius: var(--radius-small);
+  color: #8c1717;
+  background: #fff4f4;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.auth-form-error ul { margin: 0; padding-inline-start: 20px; }
+.auth-form-error p { margin: 0; }
+.auth-form-error .auth-form-error__reference { margin-top: 8px; font-size: 0.875rem; }
+
+.auth-registration-notice {
+  padding: 14px;
+  border: 1px solid #287342;
+  border-radius: var(--radius-small);
+  color: #18552c;
+  background: #effbf2;
+}
+
+/* Desktop: form tối đa 420px theo yêu cầu thu nhỏ thêm; giữ chữ nhập ít nhất 16px.
+   Chỉnh kích thước thật tại đây; form vẫn tự cao lên và cuộn khi có lỗi hoặc zoom.
+   Các biến --auth-field-* chỉ ảnh hưởng Register, không đổi control dùng chung/mobile. */
+@media (min-width: 901px) {
+  .register-page__panel { padding: clamp(16px, 3dvh, 40px) clamp(24px, 3vw, 48px); }
+  .register-page__content { width: min(100%, 420px); }
+  .register-page__heading { margin-bottom: 14px; }
+  .register-page__heading > img { width: 92px; height: auto; }
+  .register-page .register-page__heading h1 { font-size: 1.75rem; }
+
+  .register-form {
+    gap: 14px;
+    --auth-field-height: 48px;
+    --auth-field-gap: 5px;
+    --auth-field-label-size: 1rem;
+    --auth-field-font-size: 1rem;
+    --auth-field-inset: 12px;
+    --auth-field-icon-size: 28px;
+  }
+
+  /* Giảm cả padding input: chỉ giảm min-height sẽ còn bị nội dung bên trong đẩy cao. */
+  .register-form .auth-field__input { padding-block: 8px; }
+  /* Giữ vùng bấm mắt 44px dù icon nhỏ lại, thuận tiện dùng chuột và bàn phím. */
+  .register-form .auth-field__toggle { width: 44px; height: 44px; padding: 6px; }
+  .register-form .auth-field__toggle > span { width: 32px; height: 32px; }
+  .register-form__submit { min-height: 48px; margin-top: 6px; padding-block: 8px; font-size: 1.5rem; }
+  .register-page__login { margin-top: 20px; font-size: 1rem; }
+}
+
+/* Chưa có Figma mobile: fallback một cột, ưu tiên form và bỏ minh họa thuần trang trí. */
+@media (max-width: 900px) {
+  .register-page { grid-template-columns: minmax(0, 1fr); }
+  .register-page__visual { display: none; }
+  .register-page__panel { min-height: 100dvh; padding: 28px 20px; }
+}
+
+@media (max-width: 479px) {
+  .register-page__panel { padding: 24px 16px; }
+  .register-page__heading > img { width: 108px; height: auto; }
+  .register-page .register-page__heading h1 { font-size: 2.125rem; }
+  .register-form { gap: 18px; --auth-field-font-size: 1rem; --auth-field-inset: 12px; --auth-field-icon-size: 32px; }
+  .register-form .auth-field__toggle { width: 52px; height: 52px; padding: 6px; }
+  .register-form .auth-field__toggle > span { width: 40px; height: 40px; }
+  .register-form__submit { min-height: 60px; font-size: 1.75rem; }
+  .register-page__login { font-size: 1rem; }
+}

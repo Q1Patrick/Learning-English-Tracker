@@ -86,11 +86,38 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework_simplejwt.authentication.JWTAuthentication"],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "apps.accounts.session_auth.AppSessionAuthentication",
+    ],
     "DEFAULT_PAGINATION_CLASS": "common.pagination.StandardPagination",
     "PAGE_SIZE": 20,
     "EXCEPTION_HANDLER": "common.exceptions.api_exception_handler",
 }
+# Phiên web dùng DB Django, tách marker khỏi phiên admin và giữ JWT API hiện có.
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_NAME = "let_sessionid"
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_DOMAIN = None
+SESSION_COOKIE_SECURE = False
+SESSION_SAVE_EVERY_REQUEST = False
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_DOMAIN = None
+CSRF_COOKIE_SECURE = False
+CSRF_FAILURE_VIEW = "apps.accounts.session_views.csrf_failure"
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+APP_SESSION_ABSOLUTE_SECONDS = 8 * 60 * 60
+APP_SESSION_IDLE_SECONDS = 30 * 60
+APP_SESSION_REMEMBER_ABSOLUTE_SECONDS = 7 * 24 * 60 * 60
+APP_SESSION_REMEMBER_IDLE_SECONDS = 24 * 60 * 60
+# set_expiry(0) giữ cookie đến khi đóng trình duyệt; marker vẫn giới hạn 8 giờ.
+SESSION_COOKIE_AGE = APP_SESSION_ABSOLUTE_SECONDS
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),

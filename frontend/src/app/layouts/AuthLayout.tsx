@@ -3,7 +3,7 @@ import { Outlet } from 'react-router'
 import PublicHeader from './PublicHeader'
 
 // Login có header công khai; Register độc lập theo hai bản desktop đã bàn giao.
-// Form, illustration và xác thực được triển khai cùng feature auth ở bước riêng.
+// Feature sở hữu form/ảnh; shell sở hữu main/header/footer để không lồng landmark.
 export default function AuthLayout({ variant }: { variant: 'login' | 'register' }) {
   return (
     <div className={`auth-shell auth-shell--${variant}`}>
@@ -12,6 +12,13 @@ export default function AuthLayout({ variant }: { variant: 'login' | 'register' 
       <main id="main-content" className="auth-main" tabIndex={-1}>
         <Outlet />
       </main>
+      {variant === 'login' && (
+        // Chỉ dùng liên kết repository đã có; không chép thông tin liên hệ cá nhân từ ảnh Figma.
+        <footer className="login-footer">
+          <span>Learning English Tracker</span>
+          <a href="https://github.com/Q1Patrick/Learning-English-Tracker" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </footer>
+      )}
     </div>
   )
 }

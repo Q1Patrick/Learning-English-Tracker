@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 
 import App from './App.tsx'
+import AuthProvider from './features/auth/AuthProvider'
 import './index.css'
 
 const rootElement = document.getElementById('root')
@@ -16,7 +17,10 @@ createRoot(rootElement).render(
   <StrictMode>
     {/* Chỉ đặt một BrowserRouter tại entry point; AppRouter chỉ khai báo các route. */}
     <BrowserRouter>
-      <App />
+      {/* Một nguồn AuthState chung cho tất cả route; không khởi tạo lại Provider khi chuyển trang. */}
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 )

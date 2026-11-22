@@ -1,0 +1,94 @@
+/* FE-03.4: scope riêng Login, giữ nguyên Register420px và khung Sidebar/Header đã duyệt.
+   Ảnh bên trái là vùng trang trí gốc Login.png; nền còn lại dùng CSS, không dùng screenshot cả trang. */
+.auth-shell--login .auth-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.login-page {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  padding: 0 clamp(20px, 4vw, 64px) 0 0;
+  color: #111;
+  background: radial-gradient(ellipse at 100% 10%, #a0efdf 0, transparent 36%),
+    linear-gradient(135deg, #b9e1ff, #e5f5ff 65%, #a2d5ff);
+}
+
+.login-page__art { position: relative; align-self: stretch; min-width: 0; }
+.login-page__art > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.login-page__card {
+  justify-self: center;
+  width: min(100%, 480px);
+  min-width: 0;
+  margin-block: clamp(16px, 3dvh, 40px);
+  padding: 24px 30px;
+  border-radius: 28px;
+  background: #fff;
+}
+
+.login-page__heading { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 18px; }
+.login-page__heading > img { width: 48px; height: 48px; }
+/* Scope h1 để typography của AuthLayout không ghi đè kích thước riêng trang. */
+.login-page .login-page__heading h1 { margin: 0; color: #000; text-align: center; font-size: 1.5rem; line-height: 1.25; }
+.login-page__prompt { margin: 0 0 18px; font-size: 1.125rem; line-height: 1.4; }
+.login-page .auth-registration-notice { margin: 0 0 18px; }
+
+.login-form {
+  display: grid;
+  gap: 16px;
+  --auth-field-height: 48px;
+  --auth-field-font-size: 1rem;
+  --auth-field-inset: 14px;
+  --auth-field-icon-size: 28px;
+  --auth-field-radius: 18px;
+  --auth-field-border-color: #394ec4;
+  --auth-field-text-color: #1d1b20;
+}
+
+/* Giữ label thật cho accessibility; trình bày trong ô nhập theo ảnh Login. */
+.login-form .auth-field__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.login-form .auth-field__input { padding-block: 8px; }
+.login-form .auth-field__input::placeholder { color: #1d1b20; font-weight: 600; }
+.login-form .auth-field__control { box-shadow: 0 3px 3px rgb(0 0 0 / 15%); }
+.login-form .auth-field[data-disabled='true'] .auth-field__control { background: #fff; }
+.login-form .auth-field__toggle { width: 44px; height: 44px; padding: 6px; }
+.login-form .auth-field__toggle > span { width: 32px; height: 32px; }
+.login-form__options { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.login-form__remember { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 0.9375rem; color: #555; }
+.login-form__remember input { width: 18px; height: 18px; margin: 0; }
+.login-form__forgot { min-height: 36px; padding: 4px 0; border: 0; color: #555; background: transparent; font-size: 0.9375rem; text-decoration: underline; }
+.login-form__support > p { margin: 4px 0 0; color: #555; font-size: 0.8125rem; }
+.login-form__submit { min-height: 48px; padding: 8px 16px; border: 1px solid #2338b1; border-radius: 18px; color: #fff; background: #304ac6; box-shadow: 0 3px 3px rgb(0 0 0 / 25%); font-size: 1.5rem; font-weight: 700; cursor: pointer; }
+.login-form__submit:hover:not(:disabled) { background: #243ba6; }
+.login-form__submit:disabled { background: #5268b3; cursor: wait; }
+.login-page__register { margin: 16px 0 0; text-align: center; font-size: 0.9375rem; }
+.login-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 14px 32px; background: #fff; font-size: 0.9375rem; }
+
+/* Chưa có Figma mobile: một cột, ưu tiên thao tác form; không ép height hoặc giấu lỗi. */
+@media (max-width: 900px) {
+  .login-page { grid-template-columns: minmax(0, 1fr); padding: 24px 20px; }
+  .login-page__art { display: none; }
+  .login-page__card { margin-block: 0; }
+}
+
+@media (max-width: 479px) {
+  .login-page { padding: 20px 12px; }
+  .login-page__card { padding: 24px 18px; }
+  .login-footer { padding: 14px 20px; }
+}

@@ -1,0 +1,148 @@
+/* Chỉ áp dụng cho field dùng chung; trang auth có thể override các biến --auth-field-* theo Figma. */
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--auth-field-gap, var(--space-2, 8px));
+  width: 100%;
+  min-width: 0;
+}
+
+.auth-field__label {
+  color: var(--auth-field-label-color, #000);
+  font-size: var(--auth-field-label-size, 1.25rem);
+  font-weight: var(--font-weight-bold, 700);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.auth-field__control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 12px);
+  min-width: 0;
+  min-height: var(--auth-field-height, 60px);
+  padding-inline: var(--auth-field-inset, 18px);
+  border: 1px solid var(--auth-field-border-color, #7b8799);
+  border-radius: var(--auth-field-radius, var(--radius-panel, 12px));
+  background: var(--color-surface, #fff);
+}
+
+.auth-field__input {
+  flex: 1 1 0;
+  width: 100%;
+  min-width: 0;
+  padding: 15px 0;
+  border: 0;
+  border-radius: 0;
+  color: var(--auth-field-text-color, var(--color-heading, #071a49));
+  background: transparent;
+  font: inherit;
+  font-size: var(--auth-field-font-size, 1.25rem);
+  line-height: 1.4;
+}
+
+.auth-field__input::placeholder {
+  color: var(--color-muted, #4a5e80);
+  opacity: 1;
+}
+
+.auth-field__control:focus-within {
+  outline: 3px solid var(--color-focus, #0873f8);
+  outline-offset: 3px;
+}
+
+/* Vòng focus nằm trên cả control, tránh hai vòng chồng lên phần nhập chữ. */
+.auth-field__input:focus-visible {
+  outline: none;
+}
+
+.auth-field[data-invalid='true'] .auth-field__control {
+  border-color: var(--auth-field-error-color, #b91c1c);
+}
+
+.auth-field__icon {
+  display: inline-flex;
+  flex: 0 0 var(--auth-field-icon-size, 24px);
+  align-items: center;
+  justify-content: center;
+  width: var(--auth-field-icon-size, 24px);
+  height: var(--auth-field-icon-size, 24px);
+  color: var(--color-muted, #4a5e80);
+  pointer-events: none;
+}
+
+.auth-field__icon > img,
+.auth-field__icon > svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.auth-field__trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-field__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-target-size, 44px);
+  height: var(--control-target-size, 44px);
+  padding: 8px;
+  border: 0;
+  border-radius: var(--radius-small, 8px);
+  color: var(--color-muted, #4a5e80);
+  background: transparent;
+  cursor: pointer;
+}
+
+.auth-field__toggle > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.auth-field__toggle > span > img,
+.auth-field__toggle > span > svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.auth-field__hint,
+.auth-field__errors {
+  margin: 0;
+  font-size: var(--font-size-small, 0.875rem);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.auth-field__hint {
+  color: var(--color-muted, #4a5e80);
+}
+
+.auth-field__errors {
+  padding-inline-start: 20px;
+  color: var(--auth-field-error-color, #b91c1c);
+}
+
+.auth-field[data-disabled='true'] .auth-field__control {
+  background: var(--color-hover, #eaf3ff);
+  cursor: not-allowed;
+}
+
+.auth-field__input:disabled {
+  color: var(--color-muted, #4a5e80);
+  cursor: not-allowed;
+  opacity: 1;
+  -webkit-text-fill-color: var(--color-muted, #4a5e80);
+}
+
+.auth-field__toggle:disabled {
+  cursor: not-allowed;
+}

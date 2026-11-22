@@ -15,6 +15,7 @@ if not os.getenv("DJANGO_ALLOWED_HOSTS") or not ALLOWED_HOSTS or "*" in ALLOWED_
 
 DEBUG = False
 SECURE_SSL_REDIRECT = True
+# Cookie phiên và CSRF chỉ được gửi qua HTTPS trong production.
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = env_int("DJANGO_HSTS_SECONDS", 3600, minimum=1)  # noqa: F405
