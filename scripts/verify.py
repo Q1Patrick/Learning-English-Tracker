@@ -8,6 +8,7 @@ import sqlite3
 import subprocess
 import sys
 import tempfile
+from contextlib import closing
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -80,7 +81,7 @@ def git_hygiene(*, staged=False):
 
 
 def inspect_database(path):
-    with sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True) as connection:
+    with closing(sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True)) as connection:
         if connection.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
             raise RuntimeError("SQLite integrity check failed.")
         if connection.execute("PRAGMA foreign_key_check").fetchone() is not None:
@@ -111,8 +112,8 @@ def migration_check(path, env, *, existing=None):
         source = existing.resolve()
         if not source.is_file():
             raise RuntimeError(f"Database not found: {source}")
-        with sqlite3.connect(source.as_uri() + "?mode=ro", uri=True) as original:
-            with sqlite3.connect(path) as copy:
+        with closing(sqlite3.connect(source.as_uri() + "?mode=ro", uri=True)) as original:
+            with closing(sqlite3.connect(path)) as copy, copy:
                 original.backup(copy)
         before = inspect_database(path)
     python("manage.py", "migrate", "--noinput", env=env)

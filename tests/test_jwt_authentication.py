@@ -43,6 +43,23 @@ class JWTAuthenticationTests(APITestCase):
             self.user.email,
         )
 
+    def test_login_preserves_password_whitespace(self):
+        password = f"  {self.password}  "
+        self.user.set_password(password)
+        self.user.save(update_fields=["password"])
+
+        response = self.client.post(
+            self.login_url, {"email": self.user.email, "password": password}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        trimmed = self.client.post(
+            self.login_url,
+            {"email": self.user.email, "password": password.strip()},
+            format="json",
+        )
+        self.assertEqual(trimmed.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_login_rejects_incorrect_password(self):
         response = self.client.post(
             self.login_url,

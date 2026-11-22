@@ -4,13 +4,15 @@
 
 [![Django CI](https://github.com/Q1Patrick/Learning-English-Tracker/actions/workflows/django.yml/badge.svg?branch=main)](https://github.com/Q1Patrick/Learning-English-Tracker/actions/workflows/django.yml)
 ![Status](https://img.shields.io/badge/status-in%20development-orange)
-![Python](https://img.shields.io/badge/Python-3.9--3.11-3776AB?logo=python&logoColor=white)
-![Django](https://img.shields.io/badge/Django-4.2-092E20?logo=django&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-5.2%20LTS-092E20?logo=django&logoColor=white)
 ![Django REST Framework](https://img.shields.io/badge/DRF-3.16-red)
 
 **Learning English Tracker** is an in-development web application for independent English learners. It provides a backend for managing vocabulary, recording study sessions, setting daily goals, and monitoring progress. The project is designed to grow into a complete learning experience with a polished web interface and AI-assisted writing feedback.
 
 **Current state:** The repository's `main` branch contains the Django REST API and data models described below. A learner-facing frontend, a working AI-feedback endpoint, and a production deployment have **not** been verified as implemented on `main`.
+
+**Local FE-03.5 implementation:** The working branch includes React AuthContext with Django database-backed web sessions, HttpOnly cookies, CSRF, reload recovery, Remember me and server logout. Existing JWT APIs remain compatible. See [frontend run/review instructions](frontend/README.md#fe-035--authcontext-và-django-session-phía-server) and the [session API contract](docs/API.md#web-session--fe-035). This describes the local implementation, not a deployment or a claim that these changes were pushed to main.
 
 ---
 
@@ -76,8 +78,8 @@ The following technologies are **present in the audited source code**, not merel
 
 | Layer | Technology |
 | --- | --- |
-| Language | Python |
-| Backend | Django 4.2 |
+| Language | Python 3.10+ |
+| Backend | Django 5.2.19 LTS |
 | REST API | Django REST Framework 3.16 |
 | Authentication | JWT via `djangorestframework-simplejwt` |
 | Data access | Django ORM and migrations |
@@ -164,7 +166,7 @@ These steps describe **local development**, not a production deployment.
 ### Prerequisites
 
 - Git
-- Python 3.9–3.11 (the versions listed in the existing CI matrix; Python 3.11 is a reasonable local choice)
+- Python 3.10 or newer (CI covers Python 3.10–3.12; Python 3.12 is a reasonable local choice)
 - `pip` and Python `venv`
 
 ### 1. Clone the repository
@@ -365,7 +367,7 @@ Run Django's configuration checks:
 python manage.py check
 ```
 
-The repository's [GitHub Actions workflow](.github/workflows/django.yml) is configured to run the Django test suite on pushes to `main` and pull requests targeting `main`, using Python **3.9, 3.10, and 3.11**.
+The repository's [GitHub Actions workflow](.github/workflows/django.yml) is configured to run the Django test suite on pushes to `main` and pull requests targeting `main`, using Python **3.10, 3.11, and 3.12**.
 
 **Current limitation:** Several test modules are placeholders or empty. Existing test files and CI configuration do not guarantee full coverage or a passing build. Recommended coverage includes:
 

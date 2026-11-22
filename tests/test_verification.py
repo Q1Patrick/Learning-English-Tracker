@@ -4,6 +4,7 @@ import sqlite3
 import subprocess
 import sys
 import tempfile
+from contextlib import closing
 from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
@@ -137,12 +138,12 @@ class DatabaseVerificationTests(TestCase):
         self.addCleanup(temporary.cleanup)
         self.directory = Path(temporary.name)
         self.source = self.directory / "learner.sqlite3"
-        with sqlite3.connect(self.source) as connection:
+        with closing(sqlite3.connect(self.source)) as connection, connection:
             connection.execute("CREATE TABLE learning_fixture (id INTEGER PRIMARY KEY, notes TEXT)")
             connection.execute("INSERT INTO learning_fixture(notes) VALUES ('private lesson')")
 
     def test_inspection_is_read_only_and_counts_learner_tables(self):
-        with sqlite3.connect(self.source) as connection:
+        with closing(sqlite3.connect(self.source)) as connection, connection:
             connection.execute("CREATE TABLE infrastructure (id INTEGER)")
         before = self.source.read_bytes()
         self.assertEqual(verify.inspect_database(self.source), {"learning_fixture": 1})
@@ -163,7 +164,7 @@ class DatabaseVerificationTests(TestCase):
             calls.append((args, env))
             self.assertEqual(Path(env["DATABASE_PATH"]), destination)
             if args[1] == "migrate" and "--check" not in args:
-                with sqlite3.connect(env["DATABASE_PATH"]) as connection:
+                with closing(sqlite3.connect(env["DATABASE_PATH"])) as connection, connection:
                     connection.execute("CREATE TABLE quizzes_new_table (id INTEGER)")
 
         with patch.object(verify, "python", side_effect=fake_migration):
@@ -180,7 +181,7 @@ class DatabaseVerificationTests(TestCase):
 
         def destructive_migration(*args, env):
             if args[1] == "migrate" and "--check" not in args:
-                with sqlite3.connect(env["DATABASE_PATH"]) as connection:
+                with closing(sqlite3.connect(env["DATABASE_PATH"])) as connection, connection:
                     connection.execute("DELETE FROM learning_fixture")
 
         with patch.object(verify, "python", side_effect=destructive_migration):
@@ -190,7 +191,7 @@ class DatabaseVerificationTests(TestCase):
         self.assertEqual(verify.inspect_database(self.source)["learning_fixture"], 1)
 
     def test_foreign_key_violations_are_detected(self):
-        with sqlite3.connect(self.source) as connection:
+        with closing(sqlite3.connect(self.source)) as connection, connection:
             connection.execute("CREATE TABLE parent (id INTEGER PRIMARY KEY)")
             connection.execute("CREATE TABLE child (parent_id INTEGER REFERENCES parent(id))")
             connection.execute("INSERT INTO child VALUES (42)")

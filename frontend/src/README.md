@@ -1,6 +1,6 @@
-# Frontend — FE-02.4 đến FE-02.7
+# Frontend — cấu trúc hiện tại đến FE-03.5
 
-React + TypeScript + Vite, React Router ở chế độ Declarative. FE-02.4 tạo tám trang khung và NotFound; FE-02.5 ghép layout, Sidebar và Header dùng lại trên các route hiện có. FE-02.6 chuẩn hóa CSS tokens/global và responsive cơ bản. Nội dung trang, form đăng nhập/đăng ký, số liệu Dashboard và tích hợp API vẫn là bước riêng.
+React + TypeScript + Vite, React Router Declarative. FE-03.5 dùng Django server-side session, AuthProvider toàn ứng dụng và cookie HttpOnly. Login cập nhật Context trước khi chuyển Dashboard; F5 khôi phục qua server. Các trang học còn là khung; Protected Routes thuộc FE-03.6. Mục FE-02.x/FE-03.4 bên dưới giữ lịch sử tại thời điểm đó. Xem [hướng dẫn session và double-check](../README.md#fe-035--authcontext-và-django-session-phía-server).
 
 ## Cấu trúc và trách nhiệm
 
@@ -24,6 +24,19 @@ src/
     home/HomePage.tsx
     auth/LoginPage.tsx
     auth/RegisterPage.tsx
+    auth/api.ts             # Register DTO → client; xác minh response
+    auth/types.ts
+    auth/registration.ts    # Validation và ánh xạ lỗi server
+    auth/auth.css
+    auth/login.ts           # Validation và ánh xạ lỗi Login
+    auth/login.css          # CSS scope Login, không đổi Register
+    auth/AuthContext.ts
+    auth/AuthProvider.tsx
+    auth/useAuth.ts
+    auth/session.ts         # Coordinator, race/abort/recheck và đồng bộ tab
+    auth/session-api.ts     # DTO/cookie/CSRF cho web; JWT API cũ giữ riêng
+    auth/SessionStatus.tsx
+    auth/session-status.css
     dashboard/DashboardPage.tsx
     vocabulary/VocabularyPage.tsx
     study-sessions/StudySessionsPage.tsx
@@ -31,12 +44,17 @@ src/
     profile/ProfileSettingsPage.tsx
     not-found/NotFoundPage.tsx
   shared/
+    api/                    # Fetch client và ApiError của FE-03.2
     ui/
+      FormField.tsx
+      PasswordField.tsx
+      form-controls.css
     styles/
       tokens.css
       global.css
   assets/
     layout/                 # Vector gốc và tài liệu nguồn
+    auth/                   # Crop pixel gốc Register; source.json + README
   App.tsx
   main.tsx
   index.css
@@ -44,11 +62,11 @@ src/
 
 | Vị trí | Trách nhiệm |
 |---|---|
-| `main.tsx` | Mount React, StrictMode và một BrowserRouter duy nhất |
+| `main.tsx` | Mount React, StrictMode, một BrowserRouter và một AuthProvider bọc App |
 | `App.tsx` | Render router, import CSS layout, cập nhật title tab và focus main khi pathname đổi |
 | `app/AppRouter.tsx` | Ghép URL/layout/trang; alias /daily-goals về /goals, giữ query/hash và replace history |
 | `app/pageTitles.ts` | Metadata title theo route, chuẩn hóa chữ hoa/thường và slash cuối |
-| `MainLayout.tsx` | Sidebar + Header + một main; menu hẹp đóng khi chuyển pathname, kể cả Back/Forward |
+| `MainLayout.tsx` | Sidebar + Header + một main với SessionStatus; menu hẹp đóng theo pathname |
 | `navigation.ts` | Nguồn cấu hình chung cho menu và tìm trang; không khai báo URL chưa có |
 | `navigationEvents.ts` | Guard side effect khi Link điều hướng cùng tab; giữ Ctrl/Meta/Shift/Alt-click mặc định |
 | `Sidebar.tsx` | NavLink, active/aria-current, nhóm tài khoản và mục Sắp có |
@@ -61,7 +79,15 @@ src/
 | `shared/styles/tokens.css` | Màu, font, spacing, radius, shadow và kích thước chung |
 | `shared/styles/global.css` | Import tokens, baseline/reset, focus, skip link và visually-hidden |
 | `features/` | Component trang và logic riêng; giữ nguyên chín trang trong FE-02.5 |
-| `shared/ui` | Khung chuẩn bị cho component dùng chung ở các bước feature |
+| `shared/ui` | FormField/PasswordField dùng lại; label/ref/error ARIA và visibility toggle |
+| `features/auth/api.ts` | Register DTO ba field, chuẩn hóa email, giữ nguyên password, guard response runtime |
+| `features/auth/registration.ts` | Validation client và ánh xạ lỗi API; không sao chép chính sách password của Django |
+| `features/auth/RegisterPage.tsx` | Orchestrate form, khóa/hủy request, focus lỗi và chuyển Login sau201 |
+| `features/auth/auth.css` | CSS Register có scope; fallback hẹp chưa có Figma mobile |
+| `features/auth/AuthProvider.tsx / useAuth.ts` | Một AuthState chung checking/authenticated/anonymous/unavailable; không JWT trong Context |
+| `features/auth/session.ts` | Bootstrap single-flight, mutation queue/Web Locks, generation và revalidate server |
+| `features/auth/session-api.ts` | Contract session, cookie same-origin và masked CSRF riêng trong RAM |
+| `features/auth/SessionStatus.tsx` | User thật, retry, Logout server; không thay ProtectedRoute |
 
 Các layout sở hữu đúng một `main#main-content`, không lồng main trong App. Link “Đến nội dung chính” hỗ trợ bàn phím. Thay đổi route chuyển focus đến nội dung mới, kể cả chuyển giữa Public/Auth/Main.
 
@@ -70,8 +96,8 @@ Các layout sở hữu đúng một `main#main-content`, không lồng main tron
 | URL | Layout | Component | Tiêu đề h1 |
 |---|---|---|---|
 | `/` | PublicLayout | HomePage | Learning English Tracker |
-| `/login` | AuthLayout login | LoginPage | Đăng nhập |
-| `/register` | AuthLayout register | RegisterPage | Đăng ký |
+| `/login` | AuthLayout login | LoginPage | Learning English Tracker |
+| `/register` | AuthLayout register | RegisterPage | Register |
 | `/dashboard` | MainLayout | DashboardPage | Bảng điều khiển |
 | `/vocabulary` | MainLayout | VocabularyPage | Từ vựng |
 | `/study-sessions` | MainLayout | StudySessionsPage | Buổi học |
@@ -80,9 +106,9 @@ Các layout sở hữu đúng một `main#main-content`, không lồng main tron
 | `/profile` | MainLayout | ProfileSettingsPage | Hồ sơ và cài đặt |
 | URL khác, ví dụ `/khong-ton-tai` | PublicLayout | NotFoundPage | Không tìm thấy trang |
 
-Mỗi trang có một h1 và mô tả. Năm trang ứng dụng dùng cùng Sidebar/Header; Home, Login, Register và NotFound không có Sidebar. Profile & Settings dùng một route. Menu vẫn active khi URL có query hoặc dấu `/` cuối. Chưa bảo vệ route bằng phiên đăng nhập thật; không có dữ liệu cá nhân được đọc hoặc hiển thị.
+Mỗi trang có một h1 và mô tả. Năm trang ứng dụng dùng cùng Sidebar/Header; Home, Login, Register và NotFound không có Sidebar. Profile & Settings dùng một route. Menu vẫn active khi URL có query hoặc dấu `/` cuối. FE-03.5 đã đọc user session thật và hiển thị email tại SessionStatus; chưa có ProtectedRoute, chưa hiển thị dữ liệu học tập/Profile.
 
-FE-02.7 cập nhật title tab theo h1, không thêm title trực quan vào Header. Query/hash giữ nguyên pathname sẽ không gọi lại effect chuyển focus. Xem [báo cáo và bằng chứng QA](../../docs/FE-02.7-QA.md).
+FE-02.7 cập nhật title tab theo metadata trang, không thêm title trực quan vào Header. Register/Login hiện có h1 tiếng Anh theo ảnh, title tab vẫn là Đăng ký/Đăng nhập. Query/hash giữ nguyên pathname sẽ không gọi lại effect chuyển focus. Xem [báo cáo và bằng chứng QA](../../docs/FE-02.7-QA.md).
 
 ## Phạm vi so với Figma/TV4
 
@@ -96,7 +122,7 @@ Tham chiếu desktop: [Figma node 32:157](https://www.figma.com/design/7Z0gBaqUE
 - Header dùng liên kết “Hồ sơ”; không hardcode tên Minh, ảnh người dùng, badge thông báo hoặc dropdown giả. Thông báo bị vô hiệu hóa và có nhãn Sắp có.
 - Đầu gradient active được tối nhẹ từ màu tham chiếu sang `#0873e8`, giữ đầu còn lại `#0865ea`, để chữ trắng đạt tối thiểu 4.5:1. Màu link chữ dùng `#0865d8`.
 - SVG bàn giao dùng chữ dạng outline; context Figma lấy ở FE-02.6 xác nhận font Inter. Chưa có file font được bundle nên CSS tiếp tục ưu tiên Inter nếu có sẵn, rồi font hệ thống. Brand đang giữ 18px của baseline đã nghiệm thu; metadata Figma là 17px. Chưa tuyên bố typography khớp pixel trên mọi máy.
-- Public/Auth mới có cấu trúc dùng chung, chưa tái tạo toàn bộ Home/Login/Register theo ảnh. Features/About chưa có section đích nên chưa thêm liên kết.
+- Home vẫn là trang khung. FE-03.3 dùng crop nguyên pixel Register.png cho minh họa/icon và form React ba field theo D-01; FE-03.4 thêm Login với minh họa Login.png, card/field compact và CSS nền. Xem [nguồn asset](assets/auth/README.md). Header giữ các link thật, Features/About chưa có section đích nên chưa thêm liên kết. Chưa khẳng định pixel-perfect Figma.
 - Chưa có bản Figma mobile được duyệt. FE-02.6 hoàn thiện responsive cơ bản: dưới 1024px dùng menu disclosure trong luồng trang; dưới 480px ô tìm trang xuống hàng riêng. Logo/icon giữ kích thước gốc, phần chữ được wrap khi cần. Phương án này hỗ trợ cửa sổ hẹp, chưa phải nghiệm thu theo thiết kế mobile.
 
 ## Chạy trong VS Code
@@ -307,7 +333,7 @@ Tài liệu: [React Router](https://reactrouter.com/start/declarative/routing), 
 - Các bước feature: xây nội dung từng màn hình theo Figma, auth/session thật và request theo [API](../../docs/API.md).
 - Forgot/Reset Password vẫn cần contract theo [bàn giao TV4](../../docs/TV4_HOME_AUTH_HANDOFF.md).
 
-Frontend đang untracked. Từ thư mục gốc:
+FE-03.3 local hiện có cả file tracked đã sửa và file mới untracked; lịch sử FE-02.7 bên trên có trạng thái tại thời điểm đó. Từ thư mục gốc:
 
 ```powershell
 git status --short --untracked-files=all -- frontend
@@ -317,4 +343,4 @@ git diff --check
 
 Git diff thông thường chưa hiển thị file untracked; review file mới trong Source Control. Giữ package-lock.json, xác nhận node_modules/dist được ignore. Chưa stage, commit, push hoặc tạo PR; các thao tác này chờ người dùng cho phép riêng.
 
-Với lần sửa FE-02.7, có [patch bảy file source](../../docs/qa/fe-02.7/implementation.patch) để review trước–sau. Từ gốc project, `git apply --reverse --check .\docs\qa\fe-02.7\implementation.patch` chỉ kiểm tra khả năng đảo patch, không chỉnh file. Checklist thủ công và giới hạn kiểm thử nằm trong báo cáo QA; frontend vẫn chưa có script test hoặc tích hợp API thật.
+Với lần sửa FE-02.7, có [patch bảy file source](../../docs/qa/fe-02.7/implementation.patch) để review trước–sau. Patch là snapshot cũ, không phải toàn bộ diff hiện tại. Frontend chưa có test framework; FE-03.2 có `check:api`, FE-03.3 có browser/API QA thật. Hướng dẫn chạy hai server, database QA, checklist và giới hạn nằm trong [frontend README](../README.md#fe-033--register-với-api-thật).
