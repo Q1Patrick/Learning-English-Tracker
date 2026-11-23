@@ -2,6 +2,8 @@ import { apiClient } from '../../shared/api/client.ts'
 import { ApiError } from '../../shared/api/errors.ts'
 import type { LoginInput, SessionResponse, SessionUser } from './types.ts'
 
+const sessionCheckTimeoutMs = 8_000
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
@@ -52,10 +54,21 @@ function parseSessionResponse(value: unknown): SessionResponse {
 }
 
 export async function fetchSession({ signal }: { signal?: AbortSignal } = {}): Promise<SessionResponse> {
-  return parseSessionResponse(await apiClient.request<unknown>('auth/session/', {
-    session: true,
-    signal,
-  }))
+  // Chỉ giới hạn GET. POST Login/Logout có thể đã được Django xử lý khi mất phản hồi.
+  const timeout = AbortSignal.timeout(sessionCheckTimeoutMs)
+  const requestSignal = signal ? AbortSignal.any([signal, timeout]) : timeout
+  try {
+    return parseSessionResponse(await apiClient.request<unknown>('auth/session/', {
+      session: true,
+      signal: requestSignal,
+    }))
+  } catch (error: unknown) {
+    // Timeout là lỗi có thể Thử lại. Abort từ coordinator vẫn được bỏ qua như trước.
+    if (timeout.aborted && requestSignal.reason === timeout.reason) {
+      throw new ApiError({ kind: 'network', code: 'session_check_timeout' })
+    }
+    throw error
+  }
 }
 
 export async function createSession(

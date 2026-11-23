@@ -73,12 +73,20 @@ def main():
         help="Origin Vite/browser được phép gửi CSRF, chỉ HTTP loopback",
     )
     parser.add_argument(
+        "--session-idle-seconds",
+        type=int,
+        help="Thời hạn không hoạt động cho phiên QA không chọn Remember me (1–300 giây)",
+    )
+    parser.add_argument(
         "--init", action="store_true", help="Áp dụng migrations có sẵn vào database QA"
     )
     parser.add_argument("--check-only", action="store_true", help="Kiểm tra schema rồi thoát")
     args = parser.parse_args()
     if not 1 <= args.port <= 65535:
         parser.error("Port phải trong khoảng1–65535.")
+    if args.session_idle_seconds is not None:
+        if args.instance == "manual" or not 1 <= args.session_idle_seconds <= 300:
+            parser.error("Thời hạn QA 1–300 giây yêu cầu --instance khác manual.")
 
     database = configure_qa(args.instance, args.frontend_origin)
     if not database.exists() and not args.init:
@@ -101,6 +109,10 @@ def main():
         print("QA schema ready; no learner database changed.")
         return
     print("Using isolated QA database. No demo data or accounts are seeded.")
+    if args.session_idle_seconds is not None:
+        # Chỉ áp dụng cho tiến trình QA này; Django settings của ứng dụng giữ nguyên.
+        settings.APP_SESSION_IDLE_SECONDS = args.session_idle_seconds
+        print(f"QA idle timeout without Remember me: {args.session_idle_seconds}s.")
     call_command("runserver", f"127.0.0.1:{args.port}", use_reloader=False)
 
 

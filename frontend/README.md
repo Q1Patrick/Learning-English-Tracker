@@ -1,6 +1,6 @@
 # Learning English Tracker — Frontend
 
-React + TypeScript + Vite. FE-03.5 đã chuyển luồng web sang Django server-side session: AuthContext quản lý user, khôi phục khi F5, Remember me và Logout thật phía server. Cookie HttpOnly do browser quản lý; web không nhận JWT. Django5.2 LTS; JWT API cũ được giữ tương thích. Dashboard còn là trang khung công khai, Protected Routes thuộc FE-03.6. Các mục FE-03.2–03.4 bên dưới là lịch sử; xem mục FE-03.5 cho hành vi/lệnh hiện tại.
+React + TypeScript + Vite. FE-03.5 dùng Django server-side session để khôi phục phiên khi F5, hỗ trợ Remember me và Logout phía server. FE-03.6 dùng phiên này để bảo vệ Dashboard và các trang học. Xem mục FE-03.6 để chạy và double-check luồng hiện tại.
 
 ## Chạy và kiểm tra
 
@@ -302,7 +302,7 @@ Test session dùng enforce_csrf_checks=True và test database riêng. verify.py 
 
 Login/logout POST không tự lặp lại sau lỗi mạng. Khi chưa rõ server đã commit hay chưa, coordinator GET để đối chiếu. Response cũ không ghi đè mutation mới; Web Locks đồng bộ mutation giữa tab khi có API này, fallback là queue trong tab và recheck khi focus/visibility/notification. BroadcastChannel chỉ gửi session-changed, không gửi user hoặc secret.
 
-Cookie HttpOnly giảm khả năng đọc trực tiếp bằng JavaScript, không chữa XSS hoặc thay thế authorization. Django kiểm tra ownership mỗi API. App vẫn chưa có route guard FE-03.6; Profile UI/Reset password chưa triển khai. Logout này hủy phiên web hiện tại, không thu hồi JWT legacy hoặc phiên độc lập ở thiết bị khác. TLS thật, mã hóa backup, CSP/MFA/rate-limit production chưa được triển khai trong task này.
+Cookie HttpOnly giảm khả năng đọc trực tiếp bằng JavaScript, không chữa XSS hoặc thay thế authorization. Django kiểm tra ownership mỗi API. Route guard được bổ sung trong FE-03.6; tích hợp API Profile và Reset password chưa triển khai. Logout này hủy phiên web hiện tại, không thu hồi JWT legacy hoặc phiên độc lập ở thiết bị khác. TLS thật, mã hóa backup, CSP/MFA/rate-limit production chưa được triển khai trong task này.
 
 ### Kết quả QA ngày20/11/2026
 
@@ -317,6 +317,67 @@ Minh chứng: [tổng hợp](../docs/qa/fe-03.5/verification-summary.json), [42 
 Hai browser-checks.mjs trong thư mục QA là protocol dành cho headless Chrome/ports8105–5179 và database QA FE035 mới, không phải npm test hoặc script để chạy lên tài khoản manual. Chúng sinh credential trong RAM, không ghi credential ra file; script chính từ chối database không rỗng trước khi tạo test account.
 
 FE-03.5 DONE kỹ thuật sau review, chờ bạn double-check. Agent dừng các server/browser riêng sau QA; bạn tự chạy hai terminal trên. Chưa stage/commit/push/merge/deploy.
+
+## FE-03.6 — Protected Routes
+
+`ProtectedRoute` đọc `AuthProvider` trước khi hiển thị layout của năm trang học. Khi chỉ có lỗi kết nối, URL trang học được giữ lại để người dùng thử kiểm tra phiên lần nữa. Khi Django xác nhận chưa đăng nhập, Login ghi nhớ URL học nội bộ. Logout chủ động về Login mặc định sau khi Django xác nhận hủy phiên.
+
+Chạy từ thư mục gốc, mỗi lệnh trong một terminal riêng:
+
+```powershell
+.\.venv\Scripts\python.exe frontend/scripts/run-auth-qa.py --init
+```
+
+```powershell
+npm.cmd --prefix frontend run dev -- --host 127.0.0.1 --port 5173 --strictPort
+```
+
+1. Trong cửa sổ ẩn danh, mở `http://127.0.0.1:5173/study-sessions?activity_type=reading#history`. Sau Login, kiểm tra cả đường dẫn, query và hash được khôi phục.
+2. F5 tại `/dashboard` và `/profile`, rồi mở `/daily-goals?view=week` để kiểm tra alias về `/goals?view=week`.
+3. Bấm **Đăng xuất**, rồi nhấn Back hoặc nhập lại `/profile`. Giao diện yêu cầu Login. Login từ URL `/login` mở trực tiếp đưa về Dashboard.
+4. Đăng nhập lại, dừng Django bằng `Ctrl+C` và F5 tại `/profile`. Giao diện báo lỗi kết nối ở URL hiện tại. Khởi động lại Django và dùng **Tab** rồi **Enter** tại nút **Thử lại**.
+5. Mở `/`, `/login`, `/register` và một URL không tồn tại khi chưa đăng nhập. Các trang công khai và 404 vẫn hiển thị.
+
+Có thể kiểm nhanh nguồn bằng `npm.cmd --prefix frontend run lint`, `npm.cmd --prefix frontend run build` và `git diff --check`. Runner Django sử dụng SQLite QA trong Temp.
+
+## FE-03.7 — Phiên hết hạn và Logout
+
+Chạy hai terminal tại thư mục gốc. Lệnh Django tạo database QA riêng và đặt thời hạn không hoạt động 30 giây cho phiên **không** chọn Remember me. Đây là cấu hình của tiến trình QA.
+
+```powershell
+.\.venv\Scripts\python.exe frontend/scripts/run-auth-qa.py --instance fe037-manual --init --port 8117 --frontend-origin http://127.0.0.1:5187 --session-idle-seconds 30
+```
+
+```powershell
+$env:DEV_API_TARGET = 'http://127.0.0.1:8117'
+npm.cmd --prefix frontend run dev -- --host 127.0.0.1 --port 5187 --strictPort
+```
+
+1. Mở `http://127.0.0.1:5187/register` trong cửa sổ ẩn danh và tạo tài khoản QA nếu đây là lần đầu dùng instance này. Mở `/profile`, đăng nhập với **Remember me bỏ chọn**, rồi giữ nguyên tab khoảng 30 giây, không F5. Đạt khi Profile tự chuyển về Login. Đăng nhập lại mở đúng Profile.
+2. Để kiểm tra lỗi mạng, đăng nhập với **Remember me được chọn**, mở Profile và bật **Network → Offline** trong DevTools. Bấm **Đăng xuất**. Đạt khi trang giữ `/profile`, ẩn nội dung học và hiện **Thử lại**. Tắt Offline rồi bấm **Thử lại**. Đạt khi Profile hiện lại vì Django vẫn giữ phiên. Lần bấm Logout tiếp theo khi online phải đưa về Login.
+3. Mở Profile ở hai tab khi đang đăng nhập. Logout ở một tab rồi xem tab còn lại. Đạt khi cả hai yêu cầu đăng nhập mà không cần F5.
+
+`GET /api/v1/auth/session/` có giới hạn chờ 8 giây nếu phản hồi bị treo. Chế độ Offline thường báo lỗi ngay, nên bước 2 kiểm tra cách giao diện phục hồi khi mất kết nối. Mất phản hồi sau khi POST Logout đã tới Django được kiểm riêng: giao diện đọc lại trạng thái phiên để quyết định có chuyển Login hay không, và giữ một POST cho mỗi lần người dùng bấm Logout.
+
+## FE-03.8 — Xem hồ sơ từ Django
+
+Chạy ở thư mục gốc, mỗi khối trong một terminal PowerShell. Database của `fe038-manual` nằm riêng trong Temp.
+
+```powershell
+.\.venv\Scripts\python.exe frontend/scripts/run-auth-qa.py --instance fe038-manual --init --port 8118 --frontend-origin http://127.0.0.1:5188
+```
+
+```powershell
+$env:DEV_API_TARGET = 'http://127.0.0.1:8118'
+npm.cmd --prefix frontend run dev -- --host 127.0.0.1 --port 5188 --strictPort
+```
+
+1. Mở `http://127.0.0.1:5188/profile` ở cửa sổ ẩn danh. Khi chưa có phiên, trang chuyển sang Login. Tạo tài khoản tại `/register` nếu cần, rồi mở lại `/profile` trước khi đăng nhập.
+2. Khi vào được Profile, mở DevTools → Network, lọc `auth/me` và F5. Kiểm tra `GET /api/v1/auth/me/` trả `200` và email trong thẻ hồ sơ khớp `data.email`. Tên hiển thị hoặc mục tiêu học bỏ trống hiện **Chưa thiết lập**. Số phút học và múi giờ hiển thị theo phản hồi Django.
+3. Để kiểm lỗi riêng của trang hồ sơ, chặn đúng URL `/api/v1/auth/me/` trong DevTools rồi F5. Phiên vẫn hợp lệ và trang báo lỗi tải. Bỏ chặn và dùng **Thử lại** để tải lại hồ sơ. Khi thiếu xác nhận danh tính (`401` hoặc ID không khớp), nút **Kiểm tra phiên** kiểm tra lại với Django qua guard.
+4. Đăng xuất và đăng nhập bằng tài khoản QA khác. Email trong thẻ hồ sơ đổi sang tài khoản mới. Thu cửa sổ hẹp để kiểm tra các nhãn và dữ liệu dài xuống dòng vừa màn hình.
+
+Khi debug, `features/profile/api.ts` chịu trách nhiệm kiểm tra response và so ID với `AuthProvider`. `ProfileSettingsPage.tsx` chịu trách nhiệm hủy request cũ và hiển thị trạng thái. Request chờ quá 8 giây hiện lỗi có thể thử lại. FE-03.8 dùng GET để xem hồ sơ.
 
 ## Tài liệu cần đọc
 

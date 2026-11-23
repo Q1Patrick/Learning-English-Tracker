@@ -12,6 +12,7 @@ import { isAbortError } from '../../shared/api/errors'
 import FormField from '../../shared/ui/FormField'
 import PasswordField from '../../shared/ui/PasswordField'
 import { hasLoginErrors, mapLoginError, validateLogin } from './login'
+import { getLoginDestination } from './protected-routes'
 import { useAuth } from './useAuth'
 import type { LoginErrors, LoginField, LoginInput } from './types'
 import './auth.css'
@@ -34,7 +35,7 @@ export default function LoginPage() {
   const pendingRequest = useRef<AbortController | null>(null)
   const navigate = useNavigate()
 
-  // Giữ thông báo Register, chỉ đọc boolean; không nhận password/JWT qua router state.
+  // Router state chỉ chứa thông báo Register hoặc URL nội bộ do guard giữ lại.
   const navigationState: unknown = useLocation().state
   const registrationComplete = typeof navigationState === 'object' && navigationState !== null
     && 'registrationComplete' in navigationState && navigationState.registrationComplete === true
@@ -84,7 +85,7 @@ export default function LoginPage() {
       // FE-03.5: Django giữ session server; Provider đã nhận user thật trước khi điều hướng.
       // Browser tự quản cookie HttpOnly, React không nhận hoặc lưu JWT/session ID.
       setInput(blankInput)
-      navigate('/dashboard', { replace: true })
+      navigate(getLoginDestination(navigationState), { replace: true })
     } catch (error: unknown) {
       if (controller.signal.aborted || pendingRequest.current !== controller || isAbortError(error)) return
       showErrors(mapLoginError(error))

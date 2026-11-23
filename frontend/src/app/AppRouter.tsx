@@ -1,7 +1,9 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router'
 
 import LoginPage from '../features/auth/LoginPage'
+import ProtectedRoute from '../features/auth/ProtectedRoute'
 import RegisterPage from '../features/auth/RegisterPage'
+import { protectedPaths } from '../features/auth/protected-routes'
 import DashboardPage from '../features/dashboard/DashboardPage'
 import DailyGoalsPage from '../features/goals/DailyGoalsPage'
 import HomePage from '../features/home/HomePage'
@@ -17,7 +19,7 @@ function DailyGoalsAlias() {
   const { search, hash } = useLocation()
 
   // Giữ bộ lọc/anchor và thay history để Back không lặp lại URL alias.
-  return <Navigate to={{ pathname: '/goals', search, hash }} replace />
+  return <Navigate to={{ pathname: protectedPaths.goals, search, hash }} replace />
 }
 
 // Layout không có path: URL hiện có được giữ nguyên; Outlet nhận trang con tương ứng.
@@ -35,13 +37,15 @@ export default function AppRouter() {
       </Route>
       <Route path="/daily-goals" element={<DailyGoalsAlias />} />
 
-      {/* Đây là các trang khung; bảo vệ bằng phiên đăng nhập thật thuộc phần tích hợp auth. */}
-      <Route element={<MainLayout />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/vocabulary" element={<VocabularyPage />} />
-        <Route path="/study-sessions" element={<StudySessionsPage />} />
-        <Route path="/goals" element={<DailyGoalsPage />} />
-        <Route path="/profile" element={<ProfileSettingsPage />} />
+      {/* Kiểm tra phiên trước khi mount cả MainLayout và nội dung trang học. */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<MainLayout />}>
+          <Route path={protectedPaths.dashboard} element={<DashboardPage />} />
+          <Route path={protectedPaths.vocabulary} element={<VocabularyPage />} />
+          <Route path={protectedPaths.studySessions} element={<StudySessionsPage />} />
+          <Route path={protectedPaths.goals} element={<DailyGoalsPage />} />
+          <Route path={protectedPaths.profile} element={<ProfileSettingsPage />} />
+        </Route>
       </Route>
 
       {/* Bắt URL không tồn tại trong React; HTTP fallback của hosting cấu hình riêng. */}
