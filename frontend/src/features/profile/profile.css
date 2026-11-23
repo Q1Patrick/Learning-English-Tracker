@@ -1,0 +1,62 @@
+.profile-settings {
+  max-width: 56rem;
+}
+
+.profile-settings__panel {
+  padding: clamp(var(--space-4), 3vw, var(--space-6));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+}
+
+.profile-settings__panel:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.profile-settings__panel p {
+  margin-block: 0 var(--space-3);
+}
+
+.profile-settings__panel p:last-child {
+  margin-block-end: 0;
+}
+
+.profile-settings__panel button {
+  min-height: var(--control-target-size);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-link);
+  border-radius: var(--radius-small);
+  color: var(--color-link);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.profile-settings__details {
+  /* Lưới tự về một cột khi thiếu chỗ, kể cả khi Sidebar đang chiếm bề ngang. */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-5) var(--space-6);
+  margin: 0;
+}
+
+.profile-settings__details dt {
+  margin-block-end: var(--space-1);
+  color: var(--color-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.profile-settings__details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.profile-settings__goal {
+  grid-column: 1 / -1;
+}
+
+.profile-settings__notice,
+.profile-settings__unset {
+  color: var(--color-muted);
+}
